@@ -285,3 +285,113 @@
 > - [`algorithm_consideration.md`](./algorithm_consideration.md) - Algorithm architecture for Features 1, 3, and 5
 > - [`Datasets.md`](./Datasets.md) - Recommended datasets per feature
 > - [`src/Domain 1.md`](./src/Domain%201.md) - Problem statement and judging rubric
+
+---
+
+## FRONTEND: Next.js + Tailwind CSS + shadcn/ui
+
+> **Goal:** Build a clean, responsive dashboard guiding the user from CV upload to ranked future roles with match scores, skill gap display, and SDG badges.
+
+### Full Tech Stack (Frontend)
+
+| Layer | Library / Tool | Purpose |
+|---|---|---|
+| Framework | next.js (App Router) | Pages, routing, server-side API calls |
+| Styling | tailwindcss | Utility-first CSS, responsive layout |
+| UI Components | shadcn/ui | Pre-built accessible components (Card, Badge, Progress, Tabs, Dialog) |
+| Icons | lucide-react | Icon set (included with shadcn) |
+| Data Visualization | recharts | Match score bar, skill gap chart, radar chart |
+| File Upload | react-dropzone | Drag-and-drop CV/PDF upload area |
+| Data Fetching | @tanstack/react-query | Async fetching, caching, loading states |
+| Animations | framer-motion | Page transitions, card entrance animations |
+| HTTP Client | axios | API calls to Python backend |
+
+### Libraries Potentially Missing from Initial Plan
+
+| Library | Status | Reason Needed |
+|---|---|---|
+| recharts | MISSING | Visualize match score bars and skill gap radar chart |
+| react-dropzone | MISSING | Drag-and-drop CV upload UX |
+| @tanstack/react-query | MISSING | Proper async state management (loading/error/data) |
+| framer-motion | MISSING | Smooth animations for role cards and transitions |
+| axios | MISSING | Structured HTTP calls to FastAPI backend |
+| lucide-react | Included | Already bundled with shadcn/ui |
+| clsx + tailwind-merge | Included | Already included with shadcn/ui setup |
+
+---
+
+### Frontend Sub-steps
+
+#### F.1 - Project Initialization
+
+- [ ] Scaffold Next.js project with TypeScript, Tailwind, App Router:
+  npx create-next-app@latest frontend --typescript --tailwind --app --src-dir
+- [ ] Initialize shadcn/ui:
+  npx shadcn@latest init
+- [ ] Install missing libraries:
+  npm install recharts react-dropzone @tanstack/react-query framer-motion axios
+- [ ] Install required shadcn components:
+  npx shadcn@latest add card badge progress tabs dialog button input skeleton
+- [ ] Configure .env.local:
+  NEXT_PUBLIC_API_URL=http://localhost:8000
+
+#### F.2 - Page Structure (App Router)
+
+- [ ] / (Home) - Landing page: hero section + "Get Started" CTA
+- [ ] /profile - Step 1: CV upload form + manual skills form
+- [ ] /results - Step 3: Ranked role cards with match score and skill gap
+- [ ] /pathway/[roleId] - Step 4: Personalized reskilling pathway detail
+- [ ] components/ui/ - All reused shadcn components
+
+#### F.3 - CV Upload Page (/profile)
+
+- [ ] Implement drag-and-drop zone using react-dropzone (accepts PDF only)
+- [ ] Alternative manual entry form: skill tags input, years of experience slider, interests select
+- [ ] On submit: POST /api/profile to backend with PDF or JSON payload
+- [ ] Show loading skeleton (shadcn Skeleton) while backend processes profile
+- [ ] Handle error states: invalid file type, extraction failure
+
+#### F.4 - Results Dashboard (/results)
+
+- [ ] Fetch ranked roles from backend: GET /api/match?user_id=...
+- [ ] Display top 3-5 role cards using shadcn Card:
+  - [ ] Role title + ESCO ID
+  - [ ] Match score as shadcn Progress bar + percentage label
+  - [ ] Score breakdown tooltip (Cosine / Hard Skill / Seniority weights)
+  - [ ] Skill gap list as colored shadcn Badge (red = core gap, yellow = supporting gap)
+  - [ ] SDG badges in card corner with Dialog popup showing impact_reasoning
+- [ ] Use framer-motion for staggered card entrance animation (fade-in)
+- [ ] Match score bar chart (all roles side by side) using recharts BarChart
+
+#### F.5 - SDG Badge Component
+
+- [ ] Create reusable SdgBadge component (sdg_goal prop)
+- [ ] Displays official SDG number + color-coded circle matching UN palette
+- [ ] Hover/click triggers shadcn Dialog with sdg_name, target, and impact_reasoning
+- [ ] Verify colors follow official UN SDG color guide
+
+#### F.6 - Skill Gap Radar Chart (Optional - High Visual Impact for Judges)
+
+- [ ] Use recharts RadarChart to visualize skill coverage vs. role requirements
+- [ ] Axes: skill categories (Technical, Domain, Soft Skills, Seniority)
+- [ ] Two overlapping polygons: User profile (blue) vs Required role (red dashed)
+
+#### F.7 - API Integration Layer
+
+- [ ] Create lib/api.ts with typed axios functions:
+  - [ ] uploadProfile(file) -> UserProfile
+  - [ ] getMatchResults(userId) -> RoleMatch[]
+  - [ ] getReskillPathway(roleId) -> Pathway
+- [ ] Wrap all calls with @tanstack/react-query useQuery / useMutation
+- [ ] Handle loading, error, and empty states in UI
+
+#### F.8 - Final UI Polish
+
+- [ ] Ensure mobile-responsive layout (Tailwind breakpoints: sm, md, lg)
+- [ ] Add dark mode via Tailwind dark: classes + next-themes
+- [ ] Verify all interactive elements have clear hover/focus states
+- [ ] Lighthouse score target: Performance > 80, Accessibility > 90
+
+---
+
+> **Note:** recharts, react-dropzone, @tanstack/react-query, framer-motion, and axios are NOT included with Next.js, Tailwind, or shadcn/ui by default and must be explicitly installed.
