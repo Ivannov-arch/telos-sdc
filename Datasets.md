@@ -1,16 +1,16 @@
-Below are the **appropriate and verifiable** datasets for Feature 1, 3, and 5. Core recommendation: use **ESCO** as the backbone for skills and occupations, **O*NET** as a complement for job tasks/skills details, **OpenDOSM / Job Market Insights** for Malaysian local context, and the **UN SDG API** for official SDG mapping. Avoid CV datasets containing real resumes, as hackathon rules prohibit real personal data. [esco.ec.europa](https://esco.ec.europa.eu/en/use-esco/download)
+ï»¿Below are the **appropriate and verifiable** datasets for Feature 1, 3, and 5. Core recommendation: use **ESCO** as the backbone for skills and occupations, **O*NET** as a complement for job tasks/skills details, **OpenDOSM / Job Market Insights** for Malaysian local context, and the **UN SDG API** for official SDG mapping. Avoid CV datasets containing real resumes, as hackathon rules prohibit real personal data. [esco.ec.europa](https://esco.ec.europa.eu/en/use-esco/download)
 
 ## Dataset Map by Feature
 
 | Feature | Primary Dataset | Role in System | Verification Status |
 |---|---|---|---|
 | 1. Skills Profile Intake | ESCO Skills/Competences + synthetic CV profiles | Normalizes skills from CV/form into standardized skill IDs | Official, free, multi-format, multi-lingual. [esco.ec.europa](https://esco.ec.europa.eu/en/use-esco/download) |
-| 3. Future-Role Matching + Skill Gap | ESCO Occupations ? Skills, O*NET Skills/Tasks, DOSM Job Market Insights | Role catalogs, required skills, skill weights/urgency, Malaysia context validation | Official and downloadable/API. [onetcenter](https://www.onetcenter.org/database.html) |
+| 3. Future-Role Matching + Skill Gap | ESCO Occupations <-> Skills, O*NET Skills/Tasks, DOSM Job Market Insights | Role catalogs, required skills, skill weights/urgency, Malaysia context validation | Official and downloadable/API. [onetcenter](https://www.onetcenter.org/database.html) |
 | 5. SDG Mapping | UN SDG API / UNSD SDG framework | Official goals, targets, and indicators for role/skill tagging | Official UN source with Goal/Target/Indicator endpoints. [unstats.un](https://unstats.un.org/sdgs/UNSDGAPIV5/swagger/index.html) |
 
 ## Feature 1: Skills Profile Intake
 
-### 1. ESCO Skills and Competences — Primary Choice
+### 1. ESCO Skills and Competences - Primary Choice
 
 **Source:** European Commission, ESCO.  
 **URL:** [https://esco.ec.europa.eu/en/use-esco/download](https://esco.ec.europa.eu/en/use-esco/download)  
@@ -28,12 +28,12 @@ Below are the **appropriate and verifiable** datasets for Feature 1, 3, and 5. C
 
 **Verification:** Official European Commission dataset, free to download, with latest versions accessible via portal or API. [esco.ec.europa](https://esco.ec.europa.eu/en/use-esco/download)
 
-### 2. Synthetic CV / Profile Dataset — Synthetic Only
+### 2. Synthetic CV / Profile Dataset - Synthetic Only
 
 For demos, avoid datasets claiming to contain "real and synthetic resumes". Hugging Face datasets such as `datasetmaster/resumes` explicitly state that they contain a mix of real and synthetic resumes, thereby **risking a violation of the rule "do not use real personal data or real CVs"**. [huggingface](https://huggingface.co/datasets/datasetmaster/resumes)
 
 **Safer Alternatives:**
-- Generate 20–50 synthetic demo profiles in JSON format adhering to the ESCO schema.
+- Generate 20-50 synthetic demo profiles in JSON format adhering to the ESCO schema.
 - Use fictitious names, fictitious experiences, and skills mapped to ESCO IDs.
 - For extraction training/evaluation datasets, use only explicitly synthetic-only datasets and verify their licenses and provenance before use.
 
@@ -41,13 +41,13 @@ For demos, avoid datasets claiming to contain "real and synthetic resumes". Hugg
 
 ## Feature 3: Future-Role Matching + Skill Gap
 
-### 1. ESCO Occupations ? Skills — Matching Basis
+### 1. ESCO Occupations <-> Skills - Matching Basis
 
 **Source:** ESCO download/API.  
 **Components to Extract:**
 - `occupations.csv` / occupation RDF
 - `skills.csv` / skill RDF
-- Occupation–skill relations, including essential vs optional skills where available in the ESCO structure. [esco.ec.europa](https://esco.ec.europa.eu/en/use-esco/download)
+- Occupation-skill relations, including essential vs optional skills where available in the ESCO structure. [esco.ec.europa](https://esco.ec.europa.eu/en/use-esco/download)
 
 **Why It Is Critical:**
 - For every target role, you can construct a required skills vector.
@@ -57,7 +57,7 @@ For demos, avoid datasets claiming to contain "real and synthetic resumes". Hugg
   $$
 - Because ESCO features hierarchical relations, gaps can be separated into *core gaps* and *supporting gaps*, rather than an undifferentiated list of missing skills. [esco.ec.europa](https://esco.ec.europa.eu/en/use-esco/download)
 
-### 2. O*NET Database — Occupation, Skill, and Task Details
+### 2. O*NET Database - Occupation, Skill, and Task Details
 
 **Source:** U.S. Department of Labor / O*NET Resource Center.  
 **URL:** [https://www.onetcenter.org/database.html](https://www.onetcenter.org/database.html)  
@@ -75,7 +75,7 @@ For demos, avoid datasets claiming to contain "real and synthetic resumes". Hugg
 
 **Verification:** Maintained by the U.S. Department of Labor, updated periodically, with the latest database release currently designated as version 31.0. [onetcenter](https://www.onetcenter.org/database.html)
 
-### 3. OpenDOSM / Job Market Insights — Malaysian Context
+### 3. OpenDOSM / Job Market Insights - Malaysian Context
 
 **Source:** Department of Statistics Malaysia (DOSM).  
 **Catalog URL:** [https://open.dosm.gov.my/data-catalogue](https://open.dosm.gov.my/data-catalogue)  
@@ -97,7 +97,7 @@ For demos, avoid datasets claiming to contain "real and synthetic resumes". Hugg
 
 ## Feature 5: SDG Mapping
 
-### UN SDG API — The Authoritative Official Source
+### UN SDG API - The Authoritative Official Source
 
 **Source:** United Nations Statistics Division.  
 **API Documentation:** [https://unstats.un.org/sdgs/UNSDGAPIV5/swagger/index.html](https://unstats.un.org/sdgs/UNSDGAPIV5/swagger/index.html)  
@@ -132,11 +132,11 @@ For demos, avoid datasets claiming to contain "real and synthetic resumes". Hugg
 }
 ```
 
-**Important:** The UN API supplies goal/target/indicator definitions, but **does not provide automated "role ? SDG" mappings**. The role/skill to SDG mapping must be maintained as an auditable curated table with verifiable justifications and sources. [unstats.un](https://unstats.un.org/sdgs/UNSDGAPIV5/swagger/index.html)
+**Important:** The UN API supplies goal/target/indicator definitions, but **does not provide automated "role -> SDG" mappings**. The role/skill to SDG mapping must be maintained as an auditable curated table with verifiable justifications and sources. [unstats.un](https://unstats.un.org/sdgs/UNSDGAPIV5/swagger/index.html)
 
 ## Most Realistic Stack for a 5-Day Hackathon
 
-1. **ESCO** as the primary canon for `skill_id`, `occupation_id`, and occupation–skill relations. [esco.ec.europa](https://esco.ec.europa.eu/en/use-esco/download)
+1. **ESCO** as the primary canon for `skill_id`, `occupation_id`, and occupation-skill relations. [esco.ec.europa](https://esco.ec.europa.eu/en/use-esco/download)
 2. **O*NET** as a complement for tasks, work activities, and detailed role descriptions. [onetcenter](https://www.onetcenter.org/database.html)
 3. **OpenDOSM Job Market Insights** for Malaysian local signals and role relevance validation. [dosm.gov](https://www.dosm.gov.my/portal-main/release-content/big-data-analytics-job-market-insights-and-my-job-profile-q42023)
 4. **UN SDG API** as the official authority for SDG goals, targets, and indicators. [unstats.un](https://unstats.un.org/sdgs/UNSDGAPIV5/swagger/index.html)
@@ -147,7 +147,7 @@ For demos, avoid datasets claiming to contain "real and synthetic resumes". Hugg
 - **License and Attribution:** Review terms of use for ESCO, O*NET, DOSM, and UNSD prior to publishing the repository.
 - **Version and Timestamps:** Record `dataset_version`, `retrieved_at`, and source URLs in the repository.
 - **Language Support:** ESCO supports multiple languages; use English as the canonical technical representation while retaining alternative labels for Bahasa Malaysia/Chinese where available. [esco.ec.europa](https://esco.ec.europa.eu/en/use-esco/download)
-- **Mapping Quality:** Never allow the LLM to invent `skill ? SDG` relations without a curated reference table; ungrounded links risk penalization as hallucinations.
+- **Mapping Quality:** Never allow the LLM to invent `skill -> SDG` relations without a curated reference table; ungrounded links risk penalization as hallucinations.
 - **CV Data:** Strictly use self-generated synthetic profiles; avoid datasets containing real resumes. [huggingface](https://huggingface.co/datasets/datasetmaster/resumes)
 
 The combination of **ESCO + O*NET + DOSM + UNSD SDG API** is the most defensible architecture: official, open, structured, citable, and comprehensive enough to power intake, matching, skill gaps, and SDG alignment without compromising privacy. [esco.ec.europa](https://esco.ec.europa.eu/en/use-esco/download)
