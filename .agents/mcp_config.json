@@ -1,7 +1,10 @@
 {
-  "mcpServers": {
-    "runpod": {
-      "serverUrl": "https://mcp.getrunpod.io/"
+    "mcpServers": {
+        "runpod": {
+            "serverUrl": "https://mcp.getrunpod.io/",
+            "headers": {
+                "Authorization": "Bearer rpa_JXPNYW0PNV3QRH7N8T5C1NY32HAX9REOKZB6KM94l2gm8t"
+            }
+        }
     }
-  }
 }
