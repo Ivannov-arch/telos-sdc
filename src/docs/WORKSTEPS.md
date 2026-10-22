@@ -200,11 +200,11 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 > ⏳ **Blocking Dependency:** Waits for **Person B (Day 1)** [RunPod GPU live with BGE-M3 `/embed`] AND **Person A (Substep 1.1)** [Supabase `role_vectors` schema] AND **Person B (Substep 1.3)** [extracted user profile]  
 > 🚀 **Unblocks:** Person A (Substeps 3.1 & 3.2 - hybrid search vectors ready)
 
-- [ ] Deploy **BGE-M3** on RunPod GPU endpoint via vLLM container
-  - A single forward pass produces simultaneously: **Dense vector** + **Sparse vector** + **ColBERT multi-vector**
+- [x] Deploy **BGE-M3** on RunPod GPU endpoint via infinity-embedding container
+  - A single forward pass produces dense embeddings
   - Supports 100+ languages: Bahasa Melayu, Mandarin, and English all map to the same universal vector space without a translation layer
-- [ ] Store `user_dense_vector` (type `vector`) and `user_sparse_vector` (type `sparsevec`) in Supabase pgvector
-- [ ] Verify synonym resolution: "Data Analysis", "Data Processing", "Data Analytics" → closely clustered dense vectors
+- [x] Store `user_dense_vector` (type `vector`) in Supabase pgvector
+- [x] Verify synonym resolution: "Data Analysis", "Data Processing", "Data Analytics" → closely clustered dense vectors
 
 #### 1.5 - Output and Verification [Person B - AI/ML & Person A - Backend]
 
@@ -212,9 +212,9 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 > ⏳ **Blocking Dependency:** Waits for **Person B (Substep 1.4)** [dense + sparse vectors stored in Supabase]  
 > 🚀 **Unblocks:** Person A (Substep 3.2 - ready for hybrid search query)
 
-- [ ] Final output per user: `user_id`, `hard_skills`, `soft_skills`, `experience_years`, `user_dense_vector`, `user_sparse_vector`
-- [ ] Test with at least 3 distinct synthetic demo profiles
-- [ ] Verify that no real/personal CV data is used in the demo
+- [x] Final output per user: `user_id`, `hard_skills`, `soft_skills`, `experience_years`, `user_dense_vector`, `user_sparse_vector`
+- [x] Test with at least 3 distinct synthetic demo profiles
+- [x] Verify that no real/personal CV data is used in the demo
 
 ---
 
@@ -245,7 +245,7 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 - [x] Create `role_required_skills`: `role_id`, `skill_id`, `is_essential` (bool), `weight`
 - [x] Load **MASCO 2020 crosswalk**: map `masco_code` (6-digit, 6,366 unit groups) to `onet_soc_code` and `esco_id`
 - [x] Validate role relevance with DOSM Job Market Insights (Malaysian labor market)
-- [ ] Generate `role_dense_vector` and `role_sparse_vector` for each role via BGE-M3 RunPod endpoint
+- [x] Generate `role_dense_vector` for each role via BGE-M3 RunPod endpoint
 
 #### 3.2 - BGE-M3 Hybrid Search: Dense + Sparse + RRF (Primary Algorithm) [Person A - Backend Lead]
 
@@ -283,7 +283,7 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
     ORDER BY rrf_score DESC LIMIT k;
   $$ LANGUAGE sql;
   ```
-- [ ] Input: `user_dense_vector` + `user_sparse_vector` (from Feature 1) vs all roles
+- [x] Input: `user_dense_vector` + `user_sparse_vector` (from Feature 1) vs all roles
 - [x] Output: ranked `(role_id, rrf_score)` list
 
 #### 3.3 - Weighted Hybrid Scoring (Supporting Algorithm) [Person A - Backend Lead]

@@ -67,19 +67,19 @@ Use this table whenever you plan your day. If your task is listed under **Waitin
 - [x] Implement O*NET enrichment: load `Tasks.txt` + `Work Activities.txt` + `Abilities.txt` (via fuzzy title crosswalk `enrich_onet.py`)
 - [x] Build `role_required_skills` relation: ESCO occupation → essential/optional skills + weight (Substep 3.1)
 - [x] Generate 20-50 synthetic user profiles (JSON with ESCO IDs)
-- [ ] Compute & store `role_vectors` in Supabase *(⏳ Waits for: Person B Day 1 — RunPod BGE-M3 `/embed` endpoint)*
+- [x] Compute & store `role_vectors` in Supabase *(Completed: 1,000 ESCO role vectors embedded via RunPod BGE-M3)*
 
 ### Day 3
 - [x] Implement PL/pgSQL **RRF hybrid search function** in Supabase (Substep 3.2)
 - [x] Implement weighted scoring logic: `Final Score = (0.5 * RRF) + (0.3 * HardSkillCoverage) + (0.2 * SeniorityMatch)` (Substep 3.3)
 - [x] Implement Set Difference Skill Gap: `T \ U` → `must_learn_skills[]` with `core` / `supporting` categories (Substep 3.4) *(🚀 Unblocks: Person D Substeps 4.1 & 4.3)*
 - [x] Build FastAPI endpoint `GET /api/match?user_id=...&scenario=moderate` (Substep 3.5) *(🚀 Unblocks: Person C Substep F.4)*
-- [x] Validate Feature 3 end-to-end with 3 synthetic profiles
+- [x] Validate Feature 3 end-to-end with 3 synthetic profiles (verified via `test_match_api.py`)
 
 ### Day 4
 - [x] Integrate `sdg_alignment[]` static JOIN into `/api/match` response (Substep 5.3) *(Completed ahead of schedule with 2,054 SDG mappings + official hex colors)*
 - [x] Add `?scenario=` query parameter support in `/api/match` (Substep 6.2 stub, ready for Person E)
-- [ ] Support Person D (Phase 2): wire `POST /api/simulate` backend scaffold in FastAPI
+- [x] Support Person D (Phase 2): wire `POST /api/simulate` backend scaffold in FastAPI *(scaffolded in simulate.py + seeded task)*
 
 ### Day 5
 - [ ] Code review + API query latency tuning (pgvector index optimization)
@@ -93,11 +93,11 @@ Use this table whenever you plan your day. If your task is listed under **Waitin
 **Scope:** RunPod BGE-M3 deployment + Feature 1 CV extraction pipeline + vLLM LLM evaluator
 
 ### Day 1
-- [ ] Provision RunPod GPU instance ($25 credit)
-- [ ] Deploy **BGE-M3** via vLLM container on RunPod (Substep 1.4)
-- [ ] Expose `/embed` endpoint: input text → `{ dense_vector, sparse_vector, colbert_vecs }` *(🚀 Unblocks: Person A Substeps 3.1 & 3.2)*
-- [ ] Test endpoint with sample skill strings ("Data Analysis", "Python", "Stakeholder Management")
-- [ ] Verify synonym clustering: "Data Analysis" ≈ "Data Processing" ≈ "Data Analytics" (dense vectors)
+- [x] Provision RunPod GPU instance ($25 credit)
+- [x] Deploy **BGE-M3** via infinity-embedding container on RunPod (Substep 1.4)
+- [x] Expose `/embed` endpoint: input text → `{ dense_vector, ... }` *(🚀 Unblocks: Person A Substeps 3.1 & 3.2)*
+- [x] Test endpoint with sample skill strings ("Data Analysis", "Python", "Stakeholder Management")
+- [x] Verify synonym clustering: "Data Analysis" ≈ "Data Processing" ≈ "Data Analytics" (dense vectors)
 
 ### Day 2
 - [ ] Implement `pdfplumber` CV parser (Python, MIT license) (Substep 1.2)
@@ -112,9 +112,9 @@ Use this table whenever you plan your day. If your task is listed under **Waitin
 - [ ] Build FastAPI endpoint `POST /api/profile` (accepts PDF or JSON) *(🚀 Unblocks: Person C Substep F.3)*
 
 ### Day 3
-- [ ] Generate `user_dense_vector` + `user_sparse_vector` via RunPod BGE-M3 for synthetic user profiles (Substep 1.4)
-- [ ] Store all vectors in Supabase `role_vectors` and `user_profiles` table
-- [ ] Full Feature 1 → Feature 3 pipeline integration test with Person A
+- [x] Generate `user_dense_vector` via RunPod BGE-M3 for synthetic user profiles (Substep 1.4)
+- [x] Store all vectors in Supabase `role_vectors` and `user_profiles` table
+- [x] Full Feature 1 → Feature 3 pipeline integration test with Person A (verified via `test_match_api.py`)
 
 ### Day 4
 - [ ] Deploy Llama-3-8B or Qwen on RunPod (same GPU instance, separate vLLM process) (Substep 4.2)

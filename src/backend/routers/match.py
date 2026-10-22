@@ -171,7 +171,7 @@ def apply_disruption_penalty(score: float, role_onet_code: str, db) -> float:
         .maybe_single()
         .execute()
     )
-    if resp.data:
+    if resp and getattr(resp, "data", None):
         penalty = resp.data.get("disruption_penalty_fast", 0.0)
         score = score * (1.0 - penalty)
     return round(score, 4)
@@ -204,7 +204,7 @@ def get_match(
         .maybe_single()
         .execute()
     )
-    if not profile_resp.data:
+    if not profile_resp or not getattr(profile_resp, "data", None):
         raise HTTPException(status_code=404, detail=f"User profile {user_id!r} not found")
 
     profile      = profile_resp.data
@@ -216,12 +216,16 @@ def get_match(
     sparse_vec = profile.get("user_sparse_vector")
 
     # ── 2. Hybrid Search (RRF) ───────────────────────────────────────────
-    # ⏳ Waits for: Person B RunPod BGE-M3 vectors + role_vectors populated
-    if dense_vec and sparse_vec:
-        rrf_resp = db.rpc(
-            "telos_sdc.hybrid_search",
-            {"query_dense": dense_vec, "query_sparse": sparse_vec, "k": top_k * 3},
-        ).execute()
+    # Uses BGE-M3 dense (+ sparse if present) vectors against role_vectors
+    if dense_vec:
+        rrf_resp = (
+            db.schema("telos_sdc")
+            .rpc(
+                "hybrid_search",
+                {"query_dense": dense_vec, "query_sparse": sparse_vec, "k": top_k * 3},
+            )
+            .execute()
+        )
         rrf_rows = rrf_resp.data or []
     else:
         # Fallback Candidate Selection:
