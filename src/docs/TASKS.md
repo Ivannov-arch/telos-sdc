@@ -53,32 +53,32 @@ Use this table whenever you plan your day. If your task is listed under **Waitin
 **Scope:** Infrastructure setup + Feature 3 core algorithm + Supabase vector functions + API routing
 
 ### Day 1
-- [ ] Initialize Supabase project, enable `pgvector` extension (v0.7.0+)
-- [ ] Create all database tables (Substep 1.1):
+- [x] Initialize Supabase project, enable `pgvector` extension (v0.7.0+)
+- [x] Create all database tables (Substep 1.1):
   - `skills`, `occupations`, `role_required_skills`
   - `role_vectors` (with `vector` and `sparsevec` columns)
   - `sdg_goals`, `sdg_targets`, `sdg_indicators`, `role_sdg`
   - `occupation_ai_exposure`, `occupation_my_signal`, `occupation_disruption_matrix` *(stub for Phase 3)*
   - `simulation_tasks` *(stub for Phase 2)*
-- [ ] Seed ESCO skills + occupations CSV into Supabase *(🚀 Unblocks: Person B Substep 1.3, Person C Substep 5.2, Person D Substep 4.1)*
-- [ ] Seed MASCO 2020 crosswalk: `masco_code` → `onet_soc_code` → `esco_id`
+- [x] Seed ESCO skills + occupations CSV into Supabase *(🚀 Unblocks: Person B Substep 1.3, Person C Substep 5.2, Person D Substep 4.1)*
+- [x] Seed MASCO 2020 crosswalk: `masco_code` → `onet_soc_code` → `esco_id`
 
 ### Day 2
-- [ ] Implement O*NET enrichment: load `Tasks.txt` + `Work Activities.txt` + `Abilities.txt`
-- [ ] Build `role_required_skills` relation: ESCO occupation → essential/optional skills + weight (Substep 3.1)
-- [ ] Generate 20-50 synthetic user profiles (JSON with ESCO IDs)
+- [x] Implement O*NET enrichment: load `Tasks.txt` + `Work Activities.txt` + `Abilities.txt` (via fuzzy title crosswalk `enrich_onet.py`)
+- [x] Build `role_required_skills` relation: ESCO occupation → essential/optional skills + weight (Substep 3.1)
+- [x] Generate 20-50 synthetic user profiles (JSON with ESCO IDs)
 - [ ] Compute & store `role_vectors` in Supabase *(⏳ Waits for: Person B Day 1 — RunPod BGE-M3 `/embed` endpoint)*
 
 ### Day 3
-- [ ] Implement PL/pgSQL **RRF hybrid search function** in Supabase (Substep 3.2) *(⏳ Waits for: Person B Substep 1.4 — user vector ready)*
-- [ ] Implement weighted scoring logic: `Final Score = (0.5 * RRF) + (0.3 * HardSkillCoverage) + (0.2 * SeniorityMatch)` (Substep 3.3)
-- [ ] Implement Set Difference Skill Gap: `T \ U` → `must_learn_skills[]` with `core` / `supporting` categories (Substep 3.4) *(🚀 Unblocks: Person D Substeps 4.1 & 4.3)*
-- [ ] Build FastAPI endpoint `GET /api/match?user_id=...&scenario=moderate` (Substep 3.5) *(🚀 Unblocks: Person C Substep F.4)*
-- [ ] Validate Feature 3 end-to-end with 3 synthetic profiles
+- [x] Implement PL/pgSQL **RRF hybrid search function** in Supabase (Substep 3.2)
+- [x] Implement weighted scoring logic: `Final Score = (0.5 * RRF) + (0.3 * HardSkillCoverage) + (0.2 * SeniorityMatch)` (Substep 3.3)
+- [x] Implement Set Difference Skill Gap: `T \ U` → `must_learn_skills[]` with `core` / `supporting` categories (Substep 3.4) *(🚀 Unblocks: Person D Substeps 4.1 & 4.3)*
+- [x] Build FastAPI endpoint `GET /api/match?user_id=...&scenario=moderate` (Substep 3.5) *(🚀 Unblocks: Person C Substep F.4)*
+- [x] Validate Feature 3 end-to-end with 3 synthetic profiles
 
 ### Day 4
-- [ ] Integrate `sdg_alignment[]` static JOIN into `/api/match` response (Substep 5.3) *(⏳ Waits for: Person C Substep 5.2 — `role_sdg` table seeded; 🚀 Unblocks: Person C Substep 5.4)*
-- [ ] Add `?scenario=` query parameter support in `/api/match` (Substep 6.2 stub, ready for Person E)
+- [x] Integrate `sdg_alignment[]` static JOIN into `/api/match` response (Substep 5.3) *(Completed ahead of schedule with 2,054 SDG mappings + official hex colors)*
+- [x] Add `?scenario=` query parameter support in `/api/match` (Substep 6.2 stub, ready for Person E)
 - [ ] Support Person D (Phase 2): wire `POST /api/simulate` backend scaffold in FastAPI
 
 ### Day 5

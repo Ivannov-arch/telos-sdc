@@ -146,7 +146,7 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 - [ ] Users can upload a CV (PDF) or fill out a form/questionnaire
 - [ ] System extracts skills in a structured manner using Structured Outputs (no free-form text)
 - [ ] Every extracted skill is mapped to an `esco_id` from the ESCO dataset
-- [ ] User profile is persisted as standardized JSON in the database
+- [x] User profile is persisted as standardized JSON in the database
 - [ ] Profile embedding vectors (dense + sparse) computed and stored for Feature 3
 
 ---
@@ -159,11 +159,11 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 > ⏳ **Blocking Dependency:** None (Starts Day 1 morning)  
 > 🚀 **Unblocks:** Person B (Substeps 1.3, 1.4), Person C (Substep 5.2), Person D (Substep 4.1)
 
-- [ ] Download ESCO dataset from https://esco.ec.europa.eu/en/use-esco/download (CSV or JSON-LD format)
-- [ ] Create `skills` table: `esco_id`, `preferred_label`, `alt_labels`, `skill_type`, `description`, `broader_skill_id`
-- [ ] Create `occupations` table: `esco_id`, `preferred_label`, `description`, `skill_ids[]`
-- [ ] Generate 20-50 synthetic demo profiles in JSON format (fictitious names, fictitious background, skills mapped to ESCO IDs)
-- [ ] **Do NOT use real CV datasets** (e.g., HuggingFace `datasetmaster/resumes`) — PII violation risk
+- [x] Download ESCO dataset from https://esco.ec.europa.eu/en/use-esco/download (CSV or JSON-LD format)
+- [x] Create `skills` table: `esco_id`, `preferred_label`, `alt_labels`, `skill_type`, `description`, `broader_skill_id`
+- [x] Create `occupations` table: `esco_id`, `preferred_label`, `description`, `skill_ids[]`
+- [x] Generate 20-50 synthetic demo profiles in JSON format (fictitious names, fictitious background, skills mapped to ESCO IDs)
+- [x] **Do NOT use real CV datasets** (e.g., HuggingFace `datasetmaster/resumes`) — PII violation risk
 
 #### 1.2 - CV / Form Parser (`pdfplumber` — MIT License, Apache 2.0 Compatible) [Person B - AI/ML & Person C - Frontend]
 
@@ -224,11 +224,11 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 
 ### Feature 3 Goals
 
-- [ ] Rank the best-fitting future roles for the user (with percentage scores)
-- [ ] Every role has a Match Score computed deterministically (not hallucinated or guessed by an LLM)
-- [ ] Identify exactly which skills the user lacks (Must-Learn Skill Gap)
-- [ ] Output is readily explainable to judges: mathematical formula exposed/documented
-- [ ] MASCO 2020 crosswalk used for Malaysian occupational context validation
+- [x] Rank the best-fitting future roles for the user (with percentage scores)
+- [x] Every role has a Match Score computed deterministically (not hallucinated or guessed by an LLM)
+- [x] Identify exactly which skills the user lacks (Must-Learn Skill Gap)
+- [x] Output is readily explainable to judges: mathematical formula exposed/documented
+- [x] MASCO 2020 crosswalk used for Malaysian occupational context validation
 
 ---
 
@@ -240,11 +240,11 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 > ⏳ **Blocking Dependency:** Waits for **Person B (Substep 1.4 / Day 1)** [RunPod BGE-M3 `/embed` endpoint live to compute `role_vectors`]  
 > 🚀 **Unblocks:** Person A (Substep 3.2 - hybrid search target space), Person C (Substep 5.2 - occupation metadata)
 
-- [ ] Ingest ESCO occupations <-> skills (essential vs optional per occupation)
-- [ ] Enrich with O*NET: append `tasks`, `work_activities`, `knowledge` per occupation
-- [ ] Create `role_required_skills`: `role_id`, `skill_id`, `is_essential` (bool), `weight`
-- [ ] Load **MASCO 2020 crosswalk**: map `masco_code` (6-digit, 6,366 unit groups) to `onet_soc_code` and `esco_id`
-- [ ] Validate role relevance with DOSM Job Market Insights (Malaysian labor market)
+- [x] Ingest ESCO occupations <-> skills (essential vs optional per occupation)
+- [x] Enrich with O*NET: append `tasks`, `work_activities`, `knowledge` per occupation (via fuzzy crosswalk)
+- [x] Create `role_required_skills`: `role_id`, `skill_id`, `is_essential` (bool), `weight`
+- [x] Load **MASCO 2020 crosswalk**: map `masco_code` (6-digit, 6,366 unit groups) to `onet_soc_code` and `esco_id`
+- [x] Validate role relevance with DOSM Job Market Insights (Malaysian labor market)
 - [ ] Generate `role_dense_vector` and `role_sparse_vector` for each role via BGE-M3 RunPod endpoint
 
 #### 3.2 - BGE-M3 Hybrid Search: Dense + Sparse + RRF (Primary Algorithm) [Person A - Backend Lead]
@@ -259,10 +259,10 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 - BGE-M3 produces dense + sparse + ColBERT in a **single GPU forward pass** — no extra inference cost
 
 - [ ] Deploy BGE-M3 on RunPod via vLLM; expose `/embed` endpoint returning `{ dense_vector, sparse_vector, colbert_vecs }`
-- [ ] Store role vectors in Supabase:
+- [x] Store role vectors in Supabase:
   - `vector` type → dense embeddings
   - `sparsevec` type → sparse embeddings (pgvector v0.7.0+)
-- [ ] Implement **Reciprocal Rank Fusion (RRF)** PL/pgSQL function in Supabase:
+- [x] Implement **Reciprocal Rank Fusion (RRF)** PL/pgSQL function in Supabase:
   ```sql
   -- RRF: 1/(k + rank) summed across dense and sparse rank lists
   CREATE OR REPLACE FUNCTION hybrid_search(
@@ -284,7 +284,7 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
   $$ LANGUAGE sql;
   ```
 - [ ] Input: `user_dense_vector` + `user_sparse_vector` (from Feature 1) vs all roles
-- [ ] Output: ranked `(role_id, rrf_score)` list
+- [x] Output: ranked `(role_id, rrf_score)` list
 
 #### 3.3 - Weighted Hybrid Scoring (Supporting Algorithm) [Person A - Backend Lead]
 
@@ -292,13 +292,13 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 > ⏳ **Blocking Dependency:** Waits for **Person A (Substep 3.2)** [RRF rankings output]  
 > 🚀 **Unblocks:** Person A (Substep 3.5 - final composite match scores)
 
-- [ ] Compute final composite score:
+- [x] Compute final composite score:
   ```
   Final Score = (0.5 * RRF_Score) + (0.3 * Hard_Skill_Coverage) + (0.2 * Seniority_Match)
   ```
-- [ ] `Hard_Skill_Coverage`: % of essential hard skills possessed by user (Set Intersection / ESCO essential flags)
-- [ ] `Seniority_Match`: compare user `experience_years` with role seniority band
-- [ ] Expose full score breakdown in UI (transparency for judges)
+- [x] `Hard_Skill_Coverage`: % of essential hard skills possessed by user (Set Intersection / ESCO essential flags)
+- [x] `Seniority_Match`: compare user `experience_years` with role seniority band
+- [x] Expose full score breakdown in UI (transparency for judges)
 
 #### 3.4 - Skill Gap Analysis (Set Difference Algorithm) [Person A - Backend Lead]
 
@@ -306,14 +306,14 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 > ⏳ **Blocking Dependency:** Waits for **Person A (Substep 3.1)** [`role_required_skills`] AND **Person B (Substep 1.3)** [`user.hard_skills`]  
 > 🚀 **Unblocks:** **Person D (Substep 4.1 & 4.3)** [feeds `must_learn_skills[]` to Feature 4 Simulation], Person C (Substep F.4)
 
-- [ ] Implement:
+- [x] Implement:
   ```
   Skill Gap = Role Required Skills — User Skills   [Set Difference: T \ U]
   ```
-- [ ] Categorize:
+- [x] Categorize:
   - **Core Gap:** missing ESCO essential skills → heavy penalty, labeled "Must Learn"
   - **Supporting Gap:** missing optional skills → minor penalty, labeled "Recommended"
-- [ ] Output ordered `must_learn_skills[]` ranked by urgency
+- [x] Output ordered `must_learn_skills[]` ranked by urgency
 
 #### 3.5 - Output and Verification [Person A - Backend Lead]
 
@@ -321,7 +321,7 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 > ⏳ **Blocking Dependency:** Waits for **Person A (Substeps 3.3 & 3.4)** [Scoring and gap analysis compiled into `/api/match`]  
 > 🚀 **Unblocks:** Person C (Substep F.4 - results page data fetch), Person D (Phase 2 integration)
 
-- [ ] Final recommendation payload per role:
+- [x] Final recommendation payload per role:
   ```json
   {
     "target_role": "AI Safety & Ethics Auditor",
@@ -340,7 +340,7 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
   }
   ```
 - [ ] Display top 3-5 matched roles on UI
-- [ ] Test with at least 3 distinct demo profiles
+- [x] Test with at least 3 distinct demo profiles
 
 ---
 
@@ -350,10 +350,10 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 
 ### Feature 5 Goals
 
-- [ ] Every recommended role links to at least one SDG
-- [ ] SDG mapping sourced from the official UN SDG API (no arbitrary LLM inventions)
+- [x] Every recommended role links to at least one SDG
+- [x] SDG mapping sourced from the official UN SDG API (no arbitrary LLM inventions)
 - [ ] UI displays official SDG badges/icons with hoverable tooltips explaining impact
-- [ ] Every link has auditable `impact_reasoning`
+- [x] Every link has auditable `impact_reasoning`
 
 ---
 
@@ -365,11 +365,11 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 > ⏳ **Blocking Dependency:** None (Starts Day 1-2)  
 > 🚀 **Unblocks:** Person C (Substep 5.2 - curated mapping table)
 
-- [ ] Access UN SDG API: https://unstats.un.org/sdgs/UNSDGAPIV5/swagger/index.html
-- [ ] Fetch and store: `GET /v1/sdg/Goal/List` → `sdg_goals` table
-- [ ] Fetch and store: `GET /v1/sdg/Goal/{goalCode}/Target/List` → `sdg_targets` table
-- [ ] Fetch and store: `GET /v1/sdg/Indicator/List` → `sdg_indicators` table
-- [ ] Create `role_sdg`: `role_id`, `sdg_goal`, `sdg_target`, `relationship_type`, `evidence`, `source`
+- [x] Access UN SDG API: https://unstats.un.org/sdgs/UNSDGAPIV5/swagger/index.html
+- [x] Fetch and store: `GET /v1/sdg/Goal/List` → `sdg_goals` table
+- [x] Fetch and store: `GET /v1/sdg/Goal/{goalCode}/Target/List` → `sdg_targets` table
+- [x] Fetch and store: `GET /v1/sdg/Indicator/List` → `sdg_indicators` table
+- [x] Create `role_sdg`: `role_id`, `sdg_goal`, `sdg_target`, `relationship_type`, `evidence`, `source`
 
 #### 5.2 - Role → SDG Curated Mapping Table [Person C - Frontend Lead]
 
@@ -377,15 +377,15 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 > ⏳ **Blocking Dependency:** Waits for **Person A (Substep 1.1 / 3.1)** [ESCO `occupations` table populated]  
 > 🚀 **Unblocks:** Person A (Substep 5.3 - static JOIN in `/api/match`)
 
-- [ ] Build curated mapping: ESCO occupations → SDG targets (no unverified LLM generation)
-- [ ] Per mapping, record:
+- [x] Build curated mapping: ESCO occupations → SDG targets (no unverified LLM generation) (via `seed_role_sdg.py`, 2,054 mappings)
+- [x] Per mapping, record:
   - `sdg_goal` (integer 1-17)
   - `sdg_target` (e.g., "8.2", "4.4")
   - `relationship_type` ("supports" / "enables" / "contributes")
   - `impact_reasoning`: 1 concise sentence
   - `source`: "UNSD SDG API"
-- [ ] Priority SDGs: 4 (Quality Education), 8 (Decent Work), 9 (Industry & Innovation), 10 (Reduced Inequalities)
-- [ ] At least 1 role must link to multiple SDGs (showcase multidimensional impact)
+- [x] Priority SDGs: 4 (Quality Education), 8 (Decent Work), 9 (Industry & Innovation), 10 (Reduced Inequalities)
+- [x] At least 1 role must link to multiple SDGs (showcase multidimensional impact)
 
 #### 5.3 - Integration into Feature 3 Output (Zero Extra Pipelines) [Person A - Backend Lead]
 
@@ -393,9 +393,9 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 > ⏳ **Blocking Dependency:** Waits for **Person C (Substep 5.2)** [`role_sdg` table seeded] AND **Person A (Substep 3.5)** [`/api/match` endpoint live]  
 > 🚀 **Unblocks:** Person C (Substep 5.4 - renders SDG badges on UI)
 
-- [ ] Feature 3 role recommendation → automated JOIN to `role_sdg` → append `sdg_alignment[]` to JSON output
-- [ ] Metadata injection is a static JOIN — zero runtime LLM call, zero latency overhead
-- [ ] Sample output:
+- [x] Feature 3 role recommendation → automated JOIN to `role_sdg` → append `sdg_alignment[]` to JSON output
+- [x] Metadata injection is a static JOIN — zero runtime LLM call, zero latency overhead
+- [x] Sample output:
   ```json
   {
     "sdg_alignment": [
@@ -409,7 +409,7 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
     ]
   }
   ```
-- [ ] Verify: no mapping generated on-the-fly without an auditable curated entry
+- [x] Verify: no mapping generated on-the-fly without an auditable curated entry
 
 #### 5.4 - UI: SDG Badge Display [Person C - Frontend Lead]
 
