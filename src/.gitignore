@@ -1,0 +1,23 @@
+algorithm_consideration.md
+deep_research.md
+deep_research_summary.md
+
+# Secrets — NEVER commit
+.env
+*.env
+
+# ESCO / dataset raw files (large, re-downloadable)
+supabase/data/
+*.zip
+*.csv
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node / Next.js (for Person C)
+node_modules/
+.next/
+.env.local
