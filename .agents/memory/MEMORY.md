@@ -1,0 +1,1 @@
+- [Trusted-operator API scope](api-access-scope.md) — shared-token access is for private testing, not multi-user profile authorization.

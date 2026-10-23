@@ -12,10 +12,11 @@ SRC_DIR = Path(__file__).resolve().parent.parent
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from backend.routers import match, profile, simulate
+from backend.access import require_api_access
 
 app = FastAPI(
     title="Aiversecity API",
@@ -31,9 +32,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(profile.router,  prefix="/api", tags=["profile"])     # Feature 1 — Person B
-app.include_router(match.router,    prefix="/api", tags=["matching"])    # Feature 3 — Person A
-app.include_router(simulate.router, prefix="/api", tags=["simulation"])  # Feature 4 — Person D
+app.include_router(profile.router, prefix="/api", tags=["profile"],
+                   dependencies=[Depends(require_api_access)])
+app.include_router(match.router, prefix="/api", tags=["matching"],
+                   dependencies=[Depends(require_api_access)])
+app.include_router(simulate.router, prefix="/api", tags=["simulation"],
+                   dependencies=[Depends(require_api_access)])
 
 
 @app.get("/", include_in_schema=False)
