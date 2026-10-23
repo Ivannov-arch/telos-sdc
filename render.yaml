@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: telos-sdc
+    runtime: python
+    region: singapore
+    plan: free
+    rootDir: src
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SECRET_KEY
+        sync: false
+      - key: PYTHON_VERSION
+        value: 3.11.9

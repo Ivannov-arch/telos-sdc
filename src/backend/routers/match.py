@@ -184,7 +184,25 @@ def apply_disruption_penalty(score: float, role_onet_code: str, db) -> float:
     return round(score, 4)
 
 
-# ── Main Endpoint ─────────────────────────────────────────────────────────────
+# ── Profile & Match Endpoints ────────────────────────────────────────────────
+
+@router.get("/profiles")
+def list_profiles():
+    """
+    GET /api/profiles
+    Returns available demo user profiles for UI selection and testing.
+    """
+    db = get_supabase()
+    resp = (
+        db.schema("telos_sdc")
+        .table("user_profiles")
+        .select("id, experience_years, hard_skills, soft_skills, source_type, created_at")
+        .order("created_at", desc=False)
+        .limit(20)
+        .execute()
+    )
+    return {"profiles": resp.data or []}
+
 
 @router.get("/match", response_model=MatchResponse)
 def get_match(

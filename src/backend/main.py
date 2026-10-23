@@ -4,6 +4,14 @@ Owner: Person A (Backend Lead)
 Run: uvicorn backend.main:app --reload --port 8000
 """
 
+import sys
+from pathlib import Path
+
+# Ensure src/ directory is on sys.path for both local development and Render deployment
+SRC_DIR = Path(__file__).resolve().parent.parent
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.routers import match, simulate
