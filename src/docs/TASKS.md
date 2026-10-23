@@ -181,24 +181,24 @@ Use this table whenever you plan your day. If your task is listed under **Waitin
 **Scope:** Feature 4 — Personalised Reskilling Pathway. Prep during Day 1–2, build Day 3–4.
 
 ### Day 1 (Prep — while Phase 1 sets up infra)
-- [ ] Read O*NET Task Statements documentation and download `Tasks.txt`
-- [ ] Map O*NET task statements to ESCO skill categories (manual curation, ~20 skills) *(⏳ Waits for: Person A Substep 1.1 — ESCO taxonomy)*
-- [ ] Draft 1-3 fictionalized scenario prompts per ESCO skill category (Substep 4.1)
+- [x] Read O*NET Task Statements documentation and download `Tasks.txt`
+- [x] Map O*NET task statements to ESCO skill categories (manual curation, ~20 skills) *(⏳ Waits for: Person A Substep 1.1 — ESCO taxonomy)*
+- [x] Draft 1-3 fictionalized scenario prompts per ESCO skill category (Substep 4.1)
   - Example: *"Given this AI audit report excerpt, write a 3-bullet remediation plan"*
-- [ ] Define `rubric_criteria[]` per scenario (2-4 evaluation dimensions)
+- [x] Define `rubric_criteria[]` per scenario (2-4 evaluation dimensions)
 
 ### Day 2 (Prep — finalize scenario bank)
-- [ ] Finalize curated `simulation_tasks` entries (min. 10 scenarios across 5+ skill categories)
-- [ ] Prepare Pydantic schema for evaluator output: `{ score_percent, improvement_reasoning, missing_concepts[] }`
-- [ ] Coordinate with Person B on RunPod LLM evaluator scaffold (prompt format & JSON enforcement)
+- [x] Finalize curated `simulation_tasks` entries (min. 10 scenarios across 5+ skill categories)
+- [x] Prepare Pydantic schema for evaluator output: `{ score_percent, improvement_reasoning, missing_concepts[] }`
+- [x] Coordinate with Person B on RunPod LLM evaluator scaffold (prompt format & JSON enforcement)
 
 ### Day 3 (Build starts — Feature 3 skill gap output now available)
-- [ ] Load `simulation_tasks` into Supabase (coordinate schema with Person A)
-- [ ] Implement evaluator prompt template (closed, rubric-anchored, no open generation)
-- [ ] Implement `POST /api/simulate`: `{ skill_id, user_response }` → `SimulationResult` (Substep 4.3)
+- [x] Load `simulation_tasks` into Supabase (coordinate schema with Person A)
+- [x] Implement evaluator prompt template (closed, rubric-anchored, no open generation)
+- [x] Implement `POST /api/simulate`: `{ skill_id, user_response }` → `SimulationResult` (Substep 4.3)
   - *(⏳ Waits for: Person B Day 4 / Day 1 — RunPod LLM server live)*
   - *(⏳ Waits for: Person A Substep 3.4 — Feature 3 `must_learn_skills[]` schema)*
-- [ ] Test evaluator: submit 3 dummy responses, verify rigid JSON output structure
+- [x] Test evaluator: submit 3 dummy responses, verify rigid JSON output structure
 
 ### Day 4 (Frontend Integration)
 - [ ] Build `/pathway/[roleId]` frontend page (Substep 4.4 / F.7):

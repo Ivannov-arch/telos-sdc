@@ -452,10 +452,10 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 
 ### Feature 4 Goals
 
-- [ ] Users receive a contextual skill simulation task (not a reading list) per identified skill gap
-- [ ] Isolated LLM evaluator (no free-form generative capability) assesses user responses
-- [ ] Evaluator returns structured JSON: `{ score_percent, improvement_reasoning, missing_concepts[] }`
-- [ ] Zero "AI slop" — LLM acts only as a rubric-based evaluator, never as a content generator
+- [x] Users receive a contextual skill simulation task (not a reading list) per identified skill gap
+- [x] Isolated LLM evaluator (no free-form generative capability) assesses user responses
+- [x] Evaluator returns structured JSON: `{ score_percent, improvement_reasoning, missing_concepts[] }`
+- [x] Zero "AI slop" — LLM acts only as a rubric-based evaluator, never as a content generator
 
 ---
 
@@ -467,10 +467,10 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 > ⏳ **Blocking Dependency:** None for initial curation (Day 1-2 prep). Final mapping waits for **Person A (Substep 1.1)** [ESCO skill IDs] AND **Person A (Substep 3.4)** [target gap types]  
 > 🚀 **Unblocks:** Person D (Substep 4.3 - DB scenario lookup)
 
-- [ ] Pull O*NET task statements for each skill gap identified in Feature 3
-- [ ] Curate 1-3 fictionalized scenario prompts per ESCO skill category
+- [x] Pull O*NET task statements for each skill gap identified in Feature 3
+- [x] Curate 1-3 fictionalized scenario prompts per ESCO skill category
   - Example: *"Given this code snippet with a bias vulnerability, propose a 5-line governance policy"*
-- [ ] Store in `simulation_tasks`: `skill_id`, `scenario_text`, `rubric_criteria[]`
+- [x] Store in `simulation_tasks`: `skill_id`, `scenario_text`, `rubric_criteria[]`
 
 #### 4.2 - Isolated LLM Evaluator (RunPod) [Person D - Phase 2 Owner & Person B - AI/ML Engineer]
 
@@ -478,9 +478,9 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 > ⏳ **Blocking Dependency:** Waits for **Person B (Day 4 / Day 1)** [RunPod vLLM LLM server live with Instructor enforcement]  
 > 🚀 **Unblocks:** Person D (Substep 4.3 - simulation grading engine)
 
-- [ ] Deploy Llama-3-8B or Qwen variant on RunPod via vLLM + Pydantic/Instructor output enforcement
-- [ ] Prompt-injection restrictions: closed evaluator, no open-ended generation allowed
-- [ ] Evaluator input: `{ user_response, rubric_criteria[], skill_context }` → returns:
+- [x] Deploy Llama-3-8B or Qwen variant on RunPod via vLLM + Pydantic/Instructor output enforcement (with resilient deterministic rubric fallback)
+- [x] Prompt-injection restrictions: closed evaluator, no open-ended generation allowed
+- [x] Evaluator input: `{ user_response, rubric_criteria[], skill_context }` → returns:
   ```json
   {
     "score_percent": 72,
@@ -488,7 +488,7 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
     "missing_concepts": ["escalation matrix", "audit trail documentation"]
   }
   ```
-- [ ] Validate output against Pydantic schema before returning to frontend
+- [x] Validate output against Pydantic schema before returning to frontend
 
 #### 4.3 - Backend API (`POST /api/simulate`) [Person D - Phase 2 Owner & Person A - Backend Lead]
 
@@ -496,10 +496,11 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 > ⏳ **Blocking Dependency:** Waits for **Person D (Substeps 4.1 & 4.2)** [scenarios seeded + evaluator online] AND **Person A (Substep 3.4)** [`must_learn_skills[]` schema]  
 > 🚀 **Unblocks:** Person D (Substep 4.4 - interactive frontend pathway page)
 
-- [ ] Implement `POST /api/simulate`: `{ skill_id, user_response }` → returns `SimulationResult`
-- [ ] Fetch scenario from `simulation_tasks` by `skill_id`
-- [ ] Call RunPod LLM evaluator with scenario rubric + user response
-- [ ] Return structured JSON to frontend
+- [x] Implement `POST /api/simulate`: `{ skill_id, user_response }` → returns `SimulationResult`
+- [x] Fetch scenario from `simulation_tasks` by `skill_id`
+- [x] Call RunPod LLM evaluator / rubric evaluator with scenario rubric + user response
+- [x] Return structured JSON to frontend
+- [x] Implement `GET /api/simulate/history` for tracking Skill Gap Reduction Rate KPI
 
 #### 4.4 - Frontend: Micro-Task Simulation Page (`/pathway/[roleId]`) [Person D - Phase 2 Owner & Person C - Frontend]
 
