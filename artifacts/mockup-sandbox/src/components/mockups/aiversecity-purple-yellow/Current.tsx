@@ -17,8 +17,8 @@ function Icon({ name = "arrow", size = 18 }: { name?: string; size?: number }) {
   return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name] ?? paths.arrow}</svg>;
 }
 
-function Observatory() {
-  return <div className="observatory" aria-label="Your skills connect to future roles and meaningful impact">
+function Observatory({ className = "" }: { className?: string }) {
+  return <div className={`observatory ${className}`.trim()} aria-label="Your skills connect to future roles and meaningful impact">
     <svg className="orbit-svg" viewBox="0 0 450 350" fill="none" aria-hidden="true">
       <defs>
         <pattern id="grid" width="25" height="25" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="var(--orbit-grid)" opacity=".4" /></pattern>
@@ -47,7 +47,7 @@ function Observatory() {
   </div>;
 }
 
-export default function Current({ className = "" }: { className?: string }) {
+export default function Current({ className = "", observatoryClassName = "" }: { className?: string; observatoryClassName?: string }) {
   return <div className={`app ${className}`}>
     <aside className="sidebar">
       <a href="#overview" className="brand" aria-label="Aiversecity home"><span className="brand-mark"><Icon name="spark" size={23} /></span>Aiversecity</a>
@@ -81,7 +81,7 @@ export default function Current({ className = "" }: { className?: string }) {
             <p>Turn what you know into what comes next. Discover your strengths, explore resilient roles, and build the skills to get there.</p>
             <div className="actions"><a className="btn lime" href="#profile">Map my potential<Icon size={16} /></a><a href="#profiles" className="text-link">I already have a profile<Icon size={14} /></a></div>
           </div>
-          <Observatory />
+          <Observatory className={observatoryClassName} />
         </section>
         <div className="signal-strip">
           <span><Icon name="check" size={14} />Grounded in the ESCO skills taxonomy</span>
