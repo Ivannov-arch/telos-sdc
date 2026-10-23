@@ -14,6 +14,7 @@ if str(SRC_DIR) not in sys.path:
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 from backend.routers import match, profile, simulate
 
 app = FastAPI(
@@ -33,6 +34,11 @@ app.add_middleware(
 app.include_router(profile.router,  prefix="/api", tags=["profile"])     # Feature 1 — Person B
 app.include_router(match.router,    prefix="/api", tags=["matching"])    # Feature 3 — Person A
 app.include_router(simulate.router, prefix="/api", tags=["simulation"])  # Feature 4 — Person D
+
+
+@app.get("/", include_in_schema=False)
+def index():
+    return RedirectResponse(url="/docs")
 
 
 @app.get("/health")
