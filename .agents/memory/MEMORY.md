@@ -1,1 +1,3 @@
 - [Trusted-operator API scope](api-access-scope.md) — shared-token access is for private testing, not multi-user profile authorization.
+- [Next 16 dev quirks](nextjs-dev-quirks.md) — no hydration without HMR origin allowed; CSS Modules broken by Tailwind loader rule; stale .next cache; CDP headless check recipe.
+- Supabase writes need the `sb_secret_` key; a publishable key reads fine but every insert fails with an RLS 42501 error (backend now reports this as a 502 with a hint).

@@ -31,6 +31,11 @@ checks only that the API process is alive.
 - `next.config.ts` sets `allowedDevOrigins` for the Replit preview domains (and
   `127.0.0.1` for local checks). Next's dev runtime does not hydrate until its
   HMR socket connects, so a blocked origin shows a page stuck in loading state.
+- Styling: Tailwind v4 is wired through a Turbopack `*.css` loader rule in
+  `next.config.ts`; that rule also captures `*.module.css`, so CSS Modules do
+  not work here. Use global classes in `src/app/globals.css` instead. If
+  stylesheet edits do not appear after a restart, delete `src/frontend/.next`
+  (Turbopack's persistent cache) and restart.
 - Checks: `cd src/frontend && npx tsc --noEmit && npx eslint .`
 
 ## External services (Replit Secrets; never commit)
@@ -52,7 +57,7 @@ checks only that the API process is alive.
 
 ## Data state (as of setup)
 
-Supabase `telos_sdc` has skills, occupations and simulation tasks seeded;
-`role_required_skills`, `role_vectors` and `role_sdg` were empty, so role
-matching returns no results until that data is prepared (see `src/supabase/`,
-`src/docs/DATASETS.md`). Backend tests: `uv run python -m unittest discover -s src -p "test_api_access.py"`.
+Supabase `telos_sdc` has skills, occupations, simulation tasks and role data
+seeded; matching returns real roles with skill gaps and SDG alignment. One
+smoke-test profile ("Smoke-test profile created during frontend setup") was
+created during setup and can be deleted. Backend tests: `uv run python -m unittest discover -s src -p "test_api_access.py"`.
