@@ -6,7 +6,27 @@ import { Icon, PageIntro } from "@/components/ui";
 
 function Observatory() {
   return <div className="observatory" aria-label="Your skills connect to future roles and meaningful impact">
-    <svg className="orbit-svg" viewBox="0 0 450 350" fill="none" aria-hidden="true"><defs><pattern id="grid" width="25" height="25" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#709c7c" opacity=".4" /></pattern><radialGradient id="core"><stop stopColor="#d6ef84" stopOpacity=".19" /><stop offset="1" stopColor="#d6ef84" stopOpacity="0" /></radialGradient></defs><rect width="450" height="350" fill="url(#grid)" /><circle cx="225" cy="170" r="142" fill="url(#core)" /><circle cx="225" cy="170" r="130" stroke="#648c70" strokeOpacity=".45" /><circle cx="225" cy="170" r="98" stroke="#80a479" strokeDasharray="3 7" strokeOpacity=".5" /><ellipse cx="225" cy="170" rx="162" ry="67" transform="rotate(-32 225 170)" stroke="#8dae7a" strokeOpacity=".6" /><ellipse cx="225" cy="170" rx="93" ry="145" transform="rotate(-35 225 170)" stroke="#8dae7a" strokeOpacity=".4" /><path d="m114 76 111 94 133-18M225 170l-55 112" stroke="#afd47c" strokeOpacity=".5" /><circle cx="225" cy="170" r="43" fill="#295f4c" stroke="#a0be7e" /><circle cx="225" cy="170" r="34" fill="#d6ef84" /><path d="m225 150 5.7 14.3L245 170l-14.3 5.7L225 190l-5.7-14.3L205 170l14.3-5.7z" fill="#164c43" /><circle cx="114" cy="76" r="5" fill="#d6ef84" /><circle cx="358" cy="152" r="5" fill="#d6ef84" /><circle cx="170" cy="282" r="5" fill="#d6ef84" /><circle cx="300" cy="68" r="3" fill="#85ac7c" /><circle cx="110" cy="222" r="3" fill="#85ac7c" /></svg>
+    <svg className="orbit-svg" viewBox="0 0 450 350" fill="none" aria-hidden="true">
+      <defs>
+        <pattern id="grid" width="25" height="25" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="var(--orbit-grid)" opacity=".4" /></pattern>
+        <radialGradient id="core"><stop stopColor="var(--lime)" stopOpacity=".19" /><stop offset="1" stopColor="var(--lime)" stopOpacity="0" /></radialGradient>
+      </defs>
+      <rect width="450" height="350" fill="url(#grid)" />
+      <circle cx="225" cy="170" r="142" fill="url(#core)" />
+      <circle cx="225" cy="170" r="130" stroke="var(--orbit-ring)" strokeOpacity=".45" />
+      <circle cx="225" cy="170" r="98" stroke="var(--orbit-ring-dash)" strokeDasharray="3 7" strokeOpacity=".5" />
+      <ellipse cx="225" cy="170" rx="162" ry="67" transform="rotate(-32 225 170)" stroke="var(--orbit-orbit)" strokeOpacity=".6" />
+      <ellipse cx="225" cy="170" rx="93" ry="145" transform="rotate(-35 225 170)" stroke="var(--orbit-orbit)" strokeOpacity=".4" />
+      <path d="m114 76 111 94 133-18M225 170l-55 112" stroke="var(--orbit-path)" strokeOpacity=".5" />
+      <circle cx="225" cy="170" r="43" fill="var(--orbit-center-bg)" stroke="var(--orbit-center-border)" />
+      <circle cx="225" cy="170" r="34" fill="var(--lime)" />
+      <path d="m225 150 5.7 14.3L245 170l-14.3 5.7L225 190l-5.7-14.3L205 170l14.3-5.7z" fill="var(--petrol)" />
+      <circle cx="114" cy="76" r="5" fill="var(--lime)" />
+      <circle cx="358" cy="152" r="5" fill="var(--lime)" />
+      <circle cx="170" cy="282" r="5" fill="var(--lime)" />
+      <circle cx="300" cy="68" r="3" fill="var(--orbit-dot)" />
+      <circle cx="110" cy="222" r="3" fill="var(--orbit-dot)" />
+    </svg>
     <div className="orbit-tag one"><Icon name="profile" size={15} /> Your unique skills</div><div className="orbit-tag two"><Icon name="target" size={15} /> Future-fit roles</div><div className="orbit-tag three"><Icon name="globe" size={15} /> Meaningful impact</div><div className="orbit-caption"><span>HUMAN POTENTIAL, CONNECTED.</span><span>01 / ∞</span></div>
   </div>;
 }
