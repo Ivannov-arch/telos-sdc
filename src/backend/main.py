@@ -36,4 +36,4 @@ app.include_router(simulate.router, prefix="/api", tags=["simulation"])  # Featu
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "service": "aiversecity-api"}
+    return {"status": "ok", "service": "telos-sdc-api"}
