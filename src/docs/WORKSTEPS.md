@@ -258,7 +258,7 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 - Sparse vectors (SPLADE-style) do exact keyword matching with statistical significance weights
 - BGE-M3 produces dense + sparse + ColBERT in a **single GPU forward pass** — no extra inference cost
 
-- [ ] Deploy BGE-M3 on RunPod via vLLM; expose `/embed` endpoint returning `{ dense_vector, sparse_vector, colbert_vecs }`
+- [x] Deploy BGE-M3 on RunPod via vLLM; expose `/embed` endpoint returning `{ dense_vector, sparse_vector, colbert_vecs }`
 - [x] Store role vectors in Supabase:
   - `vector` type → dense embeddings
   - `sparsevec` type → sparse embeddings (pgvector v0.7.0+)
@@ -417,10 +417,10 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 > ⏳ **Blocking Dependency:** Waits for **Person A (Substep 5.3)** [`sdg_alignment[]` returned in API response]  
 > 🚀 **Unblocks:** Phase 1 visual demo complete
 
-- [ ] Reusable `SdgBadge` component: `sdg_goal` prop → official UN color + number
-- [ ] Hover/click → shadcn Dialog: `sdg_name`, `target`, `impact_reasoning`
-- [ ] Use official UN SDG color palette and icons only
-- [ ] Optional: "SDG Contribution View" aggregated across all recommended roles
+- [x] Reusable `SdgBadge` component: `sdg_goal` prop → official UN color + number
+- [x] Hover/click → shadcn Dialog: `sdg_name`, `target`, `impact_reasoning`
+- [x] Use official UN SDG color palette and icons only
+- [x] Optional: "SDG Contribution View" aggregated across all recommended roles
 
 #### 5.5 - Verification [Person C - Frontend & Person A - Backend]
 
@@ -508,11 +508,11 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 > ⏳ **Blocking Dependency:** Waits for **Person C (Substep F.2/F.4)** [page routing & results UI] AND **Person D (Substep 4.3)** [`POST /api/simulate` API operational]  
 > 🚀 **Unblocks:** Phase 2 End-to-End Test complete
 
-- [ ] Display one simulation card per missing skill (from Feature 3 skill gap)
-- [ ] Text input or code editor for user response
-- [ ] On submit: POST `/api/simulate` with `{ skill_id, user_response }`
-- [ ] Feedback card: `score_percent` bar + `improvement_reasoning` + `missing_concepts[]`
-- [ ] Allow retry per simulation
+- [x] Display one simulation card per missing skill (from Feature 3 skill gap)
+- [x] Text input or code editor for user response
+- [x] On submit: POST `/api/simulate` with `{ skill_id, user_response }`
+- [x] Feedback card: `score_percent` bar + `improvement_reasoning` + `missing_concepts[]`
+- [x] Allow retry per simulation
 
 ---
 

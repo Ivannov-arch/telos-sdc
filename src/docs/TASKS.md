@@ -117,9 +117,9 @@ Use this table whenever you plan your day. If your task is listed under **Waitin
 - [x] Full Feature 1 → Feature 3 pipeline integration test with Person A (verified via `test_match_api.py`)
 
 ### Day 4
-- [ ] Deploy Llama-3-8B or Qwen on RunPod (same GPU instance, separate vLLM process) (Substep 4.2)
+- [x] Deploy Llama-3-8B or Qwen on RunPod (same GPU instance, separate vLLM process) (Substep 4.2)
   - Scaffold LLM evaluator with Pydantic/Instructor enforcement *(🚀 Unblocks: Person D Substeps 4.2 & 4.3)*
-- [ ] Optimize BGE-M3 batching for multiple role vectors
+- [x] Optimize BGE-M3 batching for multiple role vectors
 
 ### Day 5
 - [ ] Performance testing: vector generation latency acceptable for live demo (< 500ms)
@@ -200,15 +200,15 @@ Use this table whenever you plan your day. If your task is listed under **Waitin
 - [x] Test evaluator: submit 3 dummy responses, verify rigid JSON output structure
 
 ### Day 4 (Frontend Integration)
-- [ ] Build `/pathway/[roleId]` frontend page (Substep 4.4 / F.7):
+- [x] Build `/pathway/[roleId]` frontend page (Substep 4.4 / F.7):
   - Fetch skill gaps from Feature 3 output
   - Display one simulation card per `must_learn_skills[]` item
   - Text input / code editor for user response
   - On submit: POST `/api/simulate` → render feedback card
   - Allow retry
   - *(⏳ Waits for: Person C Substeps F.2 & F.4 — page layout and routing)*
-- [ ] Wire `submitSimulation(skillId, response)` in `lib/api.ts`
-- [ ] Wrap with `@tanstack/react-query` `useMutation`
+- [x] Wire `submitSimulation(skillId, response)` in `lib/api.ts`
+- [x] Wrap with `@tanstack/react-query` `useMutation`
 
 ### Day 5
 - [ ] End-to-end test: full user flow from `/results` skill gap → `/pathway/[roleId]` → simulation → feedback
