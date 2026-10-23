@@ -286,38 +286,82 @@ def build_profile_text(hard_skills: list[SkillEntry], soft_skills: list[SkillEnt
     return ". ".join(parts) if parts else "Professional skilled worker"
 
 
-def generate_user_embedding(text: str) -> Optional[list[float]]:
-    """Call RunPod BGE-M3 serverless endpoint to produce 1024-dim dense vector."""
+# In-memory vector cache to prevent duplicate RunPod serverless calls (Budget Guard)
+_EMBEDDING_CACHE: dict[str, list[float]] = {}
+
+
+def generate_user_embeddings_batch(texts: list[str], batch_size: int = 32) -> list[Optional[list[float]]]:
+    """
+    Batched and cached vector generation for multiple texts via RunPod BGE-M3.
+    Checks memory cache first, batches uncached texts up to batch_size per request,
+    and caches results to prevent duplicate serverless billing.
+    """
+    if not texts:
+        return []
+
+    results: list[Optional[list[float]]] = [None] * len(texts)
+    uncached_indices: list[int] = []
+    uncached_texts: list[str] = []
+
+    for i, t in enumerate(texts):
+        cleaned = t.strip()
+        if cleaned in _EMBEDDING_CACHE:
+            results[i] = _EMBEDDING_CACHE[cleaned]
+        else:
+            uncached_indices.append(i)
+            uncached_texts.append(cleaned)
+
+    if not uncached_texts:
+        return results
+
     if not RUNPOD_BGE_M3_URL or not RUNPOD_API_KEY:
         logger.warning("RUNPOD_BGE_M3_URL or RUNPOD_API_KEY not set; skipping vector generation")
-        return None
+        return results
 
     headers = {
         "Authorization": f"Bearer {RUNPOD_API_KEY}",
         "Content-Type": "application/json",
     }
-    payload = {
-        "input": {
-            "model": "BAAI/bge-m3",
-            "input": [text],
-        }
-    }
 
-    try:
-        resp = requests.post(RUNPOD_BGE_M3_URL, headers=headers, json=payload, timeout=60)
-        resp.raise_for_status()
-        res_json = resp.json()
-        output = res_json.get("output", res_json)
-        if isinstance(output, dict) and "data" in output:
-            items = output["data"]
-            if items:
-                return items[0].get("embedding")
-        elif isinstance(output, list) and output:
-            return output[0]
-    except Exception as e:
-        logger.error(f"RunPod BGE-M3 vector generation failed: {e}")
-        return None
-    return None
+    for chunk_start in range(0, len(uncached_texts), batch_size):
+        chunk_texts = uncached_texts[chunk_start : chunk_start + batch_size]
+        chunk_indices = uncached_indices[chunk_start : chunk_start + batch_size]
+        payload = {
+            "input": {
+                "model": "BAAI/bge-m3",
+                "input": chunk_texts,
+            }
+        }
+
+        try:
+            resp = requests.post(RUNPOD_BGE_M3_URL, headers=headers, json=payload, timeout=60)
+            resp.raise_for_status()
+            res_json = resp.json()
+            output = res_json.get("output", res_json)
+
+            vectors: list[Optional[list[float]]] = []
+            if isinstance(output, dict) and "data" in output:
+                items = output["data"]
+                items.sort(key=lambda x: x.get("index", 0))
+                vectors = [item.get("embedding") for item in items]
+            elif isinstance(output, list):
+                vectors = output
+
+            for idx, text_val, vec in zip(chunk_indices, chunk_texts, vectors):
+                if vec:
+                    _EMBEDDING_CACHE[text_val] = vec
+                    results[idx] = vec
+
+        except Exception as e:
+            logger.error(f"RunPod BGE-M3 batch vector generation failed for chunk {chunk_start}: {e}")
+
+    return results
+
+
+def generate_user_embedding(text: str) -> Optional[list[float]]:
+    """Call RunPod BGE-M3 serverless endpoint to produce 1024-dim dense vector (cached & batched)."""
+    res = generate_user_embeddings_batch([text])
+    return res[0] if res else None
 
 
 # ── DB Persistence Helper ───────────────────────────────────────────────────

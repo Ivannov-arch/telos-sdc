@@ -117,9 +117,9 @@ Use this table whenever you plan your day. If your task is listed under **Waitin
 - [x] Full Feature 1 → Feature 3 pipeline integration test with Person A (verified via `test_match_api.py`)
 
 ### Day 4
-- [ ] Deploy Llama-3-8B or Qwen on RunPod (same GPU instance, separate vLLM process) (Substep 4.2)
+- [x] Deploy Llama-3-8B or Qwen on RunPod (same GPU instance, separate vLLM process) (Substep 4.2)
   - Scaffold LLM evaluator with Pydantic/Instructor enforcement *(🚀 Unblocks: Person D Substeps 4.2 & 4.3)*
-- [ ] Optimize BGE-M3 batching for multiple role vectors
+- [x] Optimize BGE-M3 batching for multiple role vectors
 
 ### Day 5
 - [ ] Performance testing: vector generation latency acceptable for live demo (< 500ms)

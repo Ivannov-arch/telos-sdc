@@ -71,19 +71,33 @@ def _evaluate_with_remote_llm(
             f"Return ONLY valid JSON matching this schema:\n"
             f'{{"score_percent": <int 0-100>, "improvement_reasoning": "<concise constructive feedback>", "missing_concepts": ["<concept>", ...]}}'
         )
-        resp = httpx.post(llm_url, json={"input": {"prompt": prompt}}, headers=headers, timeout=10.0)
+        payload = {"input": {"prompt": prompt, "format": "json"}}
+        resp = httpx.post(llm_url, json=payload, headers=headers, timeout=30.0)
         if resp.status_code == 200:
             data = resp.json()
-            output = data.get("output") or data
-            if isinstance(output, str):
-                match = re.search(r'\{.*\}', output, re.DOTALL)
-                if match:
-                    parsed = json.loads(match.group(0))
-                    return {
-                        "score_percent": max(0, min(100, int(parsed.get("score_percent", 50)))),
-                        "improvement_reasoning": str(parsed.get("improvement_reasoning", "")),
-                        "missing_concepts": list(parsed.get("missing_concepts", [])),
-                    }
+            raw_output = data.get("output") or data
+
+            # Handle list, dict, or string output from RunPod / Ollama / vLLM
+            output_str = ""
+            if isinstance(raw_output, list) and len(raw_output) > 0:
+                first = raw_output[0]
+                if isinstance(first, dict):
+                    output_str = first.get("response") or first.get("text") or json.dumps(first)
+                else:
+                    output_str = str(first)
+            elif isinstance(raw_output, dict):
+                output_str = raw_output.get("response") or raw_output.get("text") or json.dumps(raw_output)
+            elif isinstance(raw_output, str):
+                output_str = raw_output
+
+            match = re.search(r'\{.*\}', output_str, re.DOTALL)
+            if match:
+                parsed = json.loads(match.group(0))
+                return {
+                    "score_percent": max(0, min(100, int(parsed.get("score_percent", 50)))),
+                    "improvement_reasoning": str(parsed.get("improvement_reasoning", "")),
+                    "missing_concepts": list(parsed.get("missing_concepts", [])),
+                }
     except Exception:
         pass
     return None
