@@ -86,6 +86,8 @@
 .career-atelier .ca-footer { margin-top:28px; padding-top:16px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:12px; font-size:8px; color:#958573; }
 .career-atelier .ca-overlay { position:fixed; inset:0; z-index:99; padding:24px; background:#37332e66; display:grid; place-items:center; backdrop-filter:blur(3px); }
 .career-atelier .ca-dialog { position:relative; background:var(--paper); max-width:540px; width:100%; padding:38px; border:1px solid #cbb89e; box-shadow:0 20px 70px #51372433; }
+.career-atelier .ca-dialog.ca-dialog-sky { --paper:#e4f2fb; --ink:#24465e; --muted:#526f83; --rust:#356d92; background:var(--paper); color:var(--ink); border-color:#b8d8ed; box-shadow:0 20px 70px #254f6c26; }
+.career-atelier .ca-dialog.ca-dialog-sky .ca-primary { background:#356d92; color:#f1f8fc; }
 .career-atelier .ca-close { position:absolute; right:17px; top:17px; background:transparent; border:0; }
 .career-atelier .ca-dialog h2 { font-size:33px; margin:13px 0; }
 .career-atelier .ca-dialog p { color:var(--muted); line-height:1.8; font-size:13px; }
