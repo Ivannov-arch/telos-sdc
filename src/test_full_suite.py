@@ -11,7 +11,13 @@ Tests:
   8. GET  /api/simulate/history
 """
 
+import sys
 import json
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
 from fastapi.testclient import TestClient
 from backend.main import app
 
