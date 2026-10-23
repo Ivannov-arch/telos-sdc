@@ -1,0 +1,41 @@
+# Git
+.git
+.gitignore
+
+# Python cache & virtual environments
+__pycache__
+*.py[cod]
+*$py.class
+.venv
+venv
+env
+ENV
+
+# Environment files with sensitive credentials
+.env
+*.env
+.env.*
+
+# Datasets and large local files
+src/data/
+*.csv
+*.tsv
+*.xlsx
+*.parquet
+
+# Documentation and markdown
+docs/
+*.md
+
+# Test and development cache
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# IDE and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
