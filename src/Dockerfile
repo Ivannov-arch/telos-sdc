@@ -5,7 +5,7 @@ FROM python:3.11-slim
 # Prevent Python from writing .pyc files and enable unbuffered logging
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app/src \
+    PYTHONPATH=/app \
     PORT=8000
 
 # Set working directory inside container
@@ -17,15 +17,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies first (leveraging Docker layer caching)
-COPY src/backend/requirements.txt /app/requirements.txt
+COPY backend/requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r /app/requirements.txt
 
-# Copy application source code
-COPY src /app/src
-
-# Set working directory to src for running uvicorn
-WORKDIR /app/src
+# Copy application source code into /app
+COPY . /app
 
 # Expose default port (Render / Cloud Run will inject $PORT dynamically)
 EXPOSE 8000

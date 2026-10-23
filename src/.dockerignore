@@ -17,7 +17,7 @@ ENV
 .env.*
 
 # Datasets and large local files
-src/data/
+data/
 *.csv
 *.tsv
 *.xlsx
