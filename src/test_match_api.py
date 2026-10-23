@@ -26,7 +26,7 @@ for user_id, title in PROFILES_TO_TEST:
         print(f"Scenario: {data['scenario']}")
         print(f"Total roles matched: {len(data['results'])}\n")
         for i, r in enumerate(data["results"], 1):
-            print(f"[{i}] {r['target_role']} - Match Score: {r['match_score']}%")
+            print(f"[{i}] {r['target_role']} - Match Score: {round(r['match_score'] * 100, 2)}% (raw: {r['match_score']})")
             print(f"    RRF Candidate Score: {r['score_breakdown']['rrf_score']}")
             print(f"    Skill Coverage:      {r['score_breakdown']['hard_skill_coverage']}")
             print(f"    Seniority Match:     {r['score_breakdown']['seniority_match']}")

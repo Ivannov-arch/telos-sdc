@@ -89,26 +89,13 @@ def seniority_match(user_years: int, role_esco_id: str) -> float:
     return 0.7
 
 
-def compute_hard_skill_coverage(
+def compute_hard_skill_coverage_from_skills(
     user_skill_ids: set[str],
-    role_id: str,
-    db,
+    required: list[dict],
 ) -> tuple[float, list[dict]]:
-    """
-    Hard Skill Coverage = |essential_role_skills ∩ user_skills| / |essential_role_skills|
-    Also returns skill gap list (T \\ U).
-    """
-    resp = (
-        db.schema("telos_sdc")
-        .table("role_required_skills")
-        .select("skill_id, is_essential, weight, skills(preferred_label)")
-        .eq("role_id", role_id)
-        .execute()
-    )
-    required = resp.data or []
-
-    essential     = [r for r in required if r["is_essential"]]
-    supporting    = [r for r in required if not r["is_essential"]]
+    """Compute hard skill coverage and gap items from pre-fetched required skills list."""
+    essential     = [r for r in required if r.get("is_essential")]
+    supporting    = [r for r in required if not r.get("is_essential")]
     essential_ids = {r["skill_id"] for r in essential}
 
     covered = essential_ids & user_skill_ids
@@ -134,6 +121,26 @@ def compute_hard_skill_coverage(
             })
 
     return coverage, gap
+
+
+def compute_hard_skill_coverage(
+    user_skill_ids: set[str],
+    role_id: str,
+    db,
+) -> tuple[float, list[dict]]:
+    """
+    Hard Skill Coverage = |essential_role_skills ∩ user_skills| / |essential_role_skills|
+    Also returns skill gap list (T \\ U).
+    """
+    resp = (
+        db.schema("telos_sdc")
+        .table("role_required_skills")
+        .select("skill_id, is_essential, weight, skills(preferred_label)")
+        .eq("role_id", role_id)
+        .execute()
+    )
+    required = resp.data or []
+    return compute_hard_skill_coverage_from_skills(user_skill_ids, required)
 
 
 def get_sdg_alignment(role_id: str, db) -> list[dict]:
@@ -280,35 +287,90 @@ def get_match(
     )
     occ_map = {o["esco_id"]: o for o in (occ_resp.data or [])}
 
+    # Batch fetch role_required_skills for all candidate roles
+    rrs_resp = (
+        db.schema("telos_sdc")
+        .table("role_required_skills")
+        .select("role_id, skill_id, is_essential, weight, skills(preferred_label)")
+        .in_("role_id", role_ids)
+        .execute()
+    )
+    skills_by_role: dict[str, list[dict]] = {}
+    for r in (rrs_resp.data or []):
+        skills_by_role.setdefault(r["role_id"], []).append(r)
+
+    # Batch fetch role_sdg for all candidate roles
+    sdg_resp = (
+        db.schema("telos_sdc")
+        .table("role_sdg")
+        .select("role_id, sdg_goal, sdg_goals(title, color_hex), sdg_target, impact_reasoning, source")
+        .in_("role_id", role_ids)
+        .execute()
+    )
+    sdg_by_role: dict[str, list[dict]] = {}
+    for row in (sdg_resp.data or []):
+        sdg_by_role.setdefault(row["role_id"], []).append({
+            "sdg_goal":        row["sdg_goal"],
+            "sdg_name":        row.get("sdg_goals", {}).get("title", "") if row.get("sdg_goals") else "",
+            "target":          row.get("sdg_target"),
+            "impact_reasoning": row.get("impact_reasoning", ""),
+            "source":          row.get("source", "UNSD SDG API"),
+            "color_hex":       row.get("sdg_goals", {}).get("color_hex") if row.get("sdg_goals") else None,
+        })
+
+    # Batch fetch disruption penalties if scenario == "fast"
+    disruption_penalties: dict[str, float] = {}
+    if scenario == "fast":
+        onet_codes = [
+            occ_map[r]["onet_soc_code"]
+            for r in role_ids
+            if occ_map.get(r, {}).get("onet_soc_code")
+        ]
+        if onet_codes:
+            dm_resp = (
+                db.schema("telos_sdc")
+                .table("occupation_disruption_matrix")
+                .select("onet_soc_code, disruption_penalty_fast")
+                .in_("onet_soc_code", onet_codes)
+                .execute()
+            )
+            for dm in (dm_resp.data or []):
+                disruption_penalties[dm["onet_soc_code"]] = dm.get("disruption_penalty_fast", 0.0)
+
     for rrf_row in rrf_rows:
         role_id   = rrf_row["role_id"]
         rrf_score = float(rrf_row["rrf_score"])
         occ       = occ_map.get(role_id, {})
 
-        hard_skill_cov, skill_gap = compute_hard_skill_coverage(
-            user_skill_ids, role_id, db
+        role_skills = skills_by_role.get(role_id, [])
+        hard_skill_cov, skill_gap = compute_hard_skill_coverage_from_skills(
+            user_skill_ids, role_skills
         )
         sen_score = seniority_match(experience, role_id)
 
+        # Normalize RRF score to 0.0 - 1.0 scale so all 3 components are in standard range
+        # Raw RRF with k=60 yields max 1/61 (~0.0164) for dense rank 1
+        norm_rrf = min(1.0, rrf_score * 61.0) if rrf_score < 0.1 else rrf_score
+
         # Weighted composite score (Substep 3.3)
         # Final Score = 0.5*RRF + 0.3*HardSkillCoverage + 0.2*SeniorityMatch
-        composite = (0.5 * rrf_score) + (0.3 * hard_skill_cov) + (0.2 * sen_score)
+        composite = (0.5 * norm_rrf) + (0.3 * hard_skill_cov) + (0.2 * sen_score)
 
         # Phase 3: apply disruption penalty for scenario=fast
         if scenario == "fast":
-            composite = apply_disruption_penalty(
-                composite, occ.get("onet_soc_code", ""), db
-            )
+            soc_code = occ.get("onet_soc_code", "")
+            penalty = disruption_penalties.get(soc_code, 0.0)
+            composite = round(composite * (1.0 - penalty), 4)
 
-        # SDG alignment JOIN (Substep 5.3) — empty until Person C seeds role_sdg
-        sdg = get_sdg_alignment(role_id, db)
+        # SDG alignment
+        sdg = sdg_by_role.get(role_id, [])
 
         results.append(MatchResult(
             target_role=occ.get("preferred_label", role_id),
             esco_id=role_id,
             match_score=round(composite, 4),
             score_breakdown=ScoreBreakdown(
-                rrf_score=round(rrf_score, 4),
+                rrf_score=round(norm_rrf, 4),
                 hard_skill_coverage=round(hard_skill_cov, 4),
                 seniority_match=round(sen_score, 4),
             ),
