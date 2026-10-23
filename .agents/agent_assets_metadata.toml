@@ -1,0 +1,16 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "CKPtyPYWOKe8hjcO7O67q"
+uri = "file://artifacts/telos-blue/design-system-preview.html"
+type = "html"
+title = "Telos Blue design system"
+description = "Aiversecity design tokens, typography, spacing, components and states. Brand colors were hue-shifted to blue while preserving source HSV saturation and value; semantic chart colors remain unchanged."
+logical_id = "73f06345-d2ca-40c7-9973-780866db5c2f"
+content_hash = "sha256:50be68b28aab36e31e763ae4f303b6b0246b6d156365bddd38dbfdbfa7164aa7"
+size = 17010
+mtime_ms = 1792772395781
+storage_uri = "gcs://replit-rams-assets-pike/rams/assets/repl:b99c1694-966d-4be2-b07b-684f0cd46ce2/73f06345-d2ca-40c7-9973-780866db5c2f/25e13322-c667-4431-9f97-a9074a65fecc"
+storage_version_token = "1792772557731857"
+content_type = "text/html"

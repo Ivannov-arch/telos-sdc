@@ -1,0 +1,341 @@
+/* Aiversecity / Telos — hue-shifted design tokens */
+:root {
+  color-scheme: light;
+
+  --background: #f0f2f6;
+  --foreground: #16233c;
+  --surface: #f7f9fc;
+  --muted: #6b717d;
+  --line: #d8dce4;
+  --petrol: #16284c;
+  --lime: #84a8ef;
+  --mint: #e1e5ec;
+  --coral: #3d67bc;
+
+  /* Data visualization colors are semantic data, not brand colors. */
+  --viz-sdg-1: #a23f5f;
+  --viz-sdg-2: #c58b34;
+  --viz-sdg-3: #4d7859;
+
+  --font-body: "DM Sans", "Segoe UI", sans-serif;
+  --font-display: "Manrope", "Segoe UI", sans-serif;
+  --font-code: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+
+  --text-xs: 0.6875rem;
+  --text-sm: 0.75rem;
+  --text-base: 0.875rem;
+  --text-lg: 1rem;
+  --text-xl: 1.3125rem;
+  --text-2xl: 1.8125rem;
+  --text-display: clamp(2rem, 4vw, 3.5rem);
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  --radius-sm: 0.4375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 0.875rem;
+  --radius-pill: 999px;
+
+  --border-width: 1px;
+  --border: var(--border-width) solid var(--line);
+  --elevation-1: 0 8px 22px rgb(22 40 76 / 10%);
+  --elevation-2: 0 16px 40px rgb(22 40 76 / 13%);
+  --focus-ring: 0 0 0 3px var(--surface), 0 0 0 6px var(--coral);
+
+  --control-height: 2.75rem;
+  --transition-fast: 160ms ease;
+  --transition-standard: 220ms ease;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  font-size: 16px;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100dvh;
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea,
+select {
+  color: inherit;
+  font: inherit;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  touch-action: manipulation;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled,
+input:disabled,
+textarea:disabled,
+select:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+:focus-visible {
+  outline: 3px solid var(--coral);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--lime);
+  color: var(--petrol);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  color: var(--foreground);
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+p {
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Reusable component primitives */
+.telos-button {
+  display: inline-flex;
+  min-height: 2.6875rem;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 0.625rem 1rem;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: transform var(--transition-standard), background-color var(--transition-standard), border-color var(--transition-standard), color var(--transition-standard);
+}
+
+.telos-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.telos-button--primary {
+  background: var(--petrol);
+  color: var(--surface);
+}
+
+.telos-button--primary:hover:not(:disabled) {
+  background: #243a65;
+}
+
+.telos-button--accent {
+  background: var(--lime);
+  color: var(--petrol);
+}
+
+.telos-button--accent:hover:not(:disabled) {
+  background: #a4bef0;
+}
+
+.telos-button--secondary {
+  border-color: #cdd3df;
+  background: transparent;
+  color: var(--foreground);
+}
+
+.telos-button--secondary:hover:not(:disabled) {
+  background: var(--mint);
+}
+
+.telos-button--quiet {
+  background: transparent;
+  color: var(--petrol);
+}
+
+.telos-button--quiet:hover:not(:disabled) {
+  background: var(--mint);
+}
+
+.telos-button--small {
+  min-height: 2.125rem;
+  padding: 0.4375rem 0.75rem;
+  font-size: var(--text-xs);
+}
+
+.telos-button--large {
+  min-height: 3rem;
+  padding: 0.8125rem 1.25rem;
+}
+
+.telos-panel {
+  border: var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  padding: var(--space-6);
+}
+
+.telos-panel--raised {
+  box-shadow: var(--elevation-1);
+}
+
+.telos-panel--soft {
+  background: var(--mint);
+}
+
+.telos-badge {
+  display: inline-flex;
+  min-height: 1.5rem;
+  align-items: center;
+  gap: 0.375rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  padding: 0.1875rem 0.625rem;
+  color: var(--foreground);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.telos-badge--brand {
+  border-color: transparent;
+  background: var(--petrol);
+  color: var(--surface);
+}
+
+.telos-badge--accent {
+  border-color: transparent;
+  background: var(--lime);
+  color: var(--petrol);
+}
+
+.telos-badge--soft {
+  border-color: transparent;
+  background: var(--mint);
+  color: var(--foreground);
+}
+
+.telos-field {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.telos-field__label {
+  color: var(--foreground);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.telos-field__hint {
+  color: var(--muted);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}
+
+.telos-field__control {
+  width: 100%;
+  min-height: var(--control-height);
+  border: 1px solid #cdd3df;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  padding: 0.6875rem 0.8125rem;
+  color: var(--foreground);
+  font-size: var(--text-base);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+}
+
+.telos-field__control::placeholder {
+  color: #858b96;
+  opacity: 1;
+}
+
+.telos-field__control:hover:not(:disabled) {
+  border-color: #9ba8c0;
+}
+
+.telos-field__control:focus-visible {
+  border-color: var(--coral);
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.telos-field__control[aria-invalid="true"] {
+  border-color: var(--coral);
+}
+
+.telos-field__control--textarea {
+  min-height: 7.5rem;
+  resize: vertical;
+}
+
+.telos-field__control--select {
+  appearance: none;
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='m1 1 5 5 5-5' stroke='%236b717d' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.875rem center;
+}
+
+.telos-field__error {
+  color: var(--coral);
+  font-size: var(--text-xs);
+}
