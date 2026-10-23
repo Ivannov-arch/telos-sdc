@@ -100,16 +100,16 @@ Use this table whenever you plan your day. If your task is listed under **Waitin
 - [x] Verify synonym clustering: "Data Analysis" ≈ "Data Processing" ≈ "Data Analytics" (dense vectors)
 
 ### Day 2
-- [ ] Implement `pdfplumber` CV parser (Python, MIT license) (Substep 1.2)
+- [x] Implement `pdfplumber` CV parser (Python, MIT license) (Substep 1.2)
   - Handle multi-column resume layout
   - Coordinate with Person C for fallback manual entry form
-- [ ] Implement Pydantic schema for structured output (Substep 1.3):
+- [x] Implement Pydantic schema for structured output (Substep 1.3):
   - Fields: `hard_skills[]`, `soft_skills[]`, `experience_years`
-  - LLM acts as NER agent only — no free-form narration
-  - *(⏳ Waits for: Person A Substep 1.1 — ESCO `skills` table in DB)*
-- [ ] Wire LLM call → Pydantic validation → ESCO ID resolution per skill
-- [ ] Store `confidence_score` per skill mapping
-- [ ] Build FastAPI endpoint `POST /api/profile` (accepts PDF or JSON) *(🚀 Unblocks: Person C Substep F.3)*
+  - NER extraction + deterministic ESCO taxonomy matching
+  - *(Completed: verified via `test_profile_api.py`)*
+- [x] Wire extraction → Pydantic validation → ESCO ID resolution per skill
+- [x] Store `confidence_score` per skill mapping (leave None if low confidence)
+- [x] Build FastAPI endpoint `POST /api/profile` (accepts PDF or JSON) *(🚀 Unblocks: Person C Substep F.3)*
 
 ### Day 3
 - [x] Generate `user_dense_vector` via RunPod BGE-M3 for synthetic user profiles (Substep 1.4)

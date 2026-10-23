@@ -14,7 +14,7 @@ if str(SRC_DIR) not in sys.path:
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.routers import match, simulate
+from backend.routers import match, profile, simulate
 
 app = FastAPI(
     title="Aiversecity API",
@@ -30,7 +30,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(match.router,    prefix="/api", tags=["matching"])
+app.include_router(profile.router,  prefix="/api", tags=["profile"])     # Feature 1 — Person B
+app.include_router(match.router,    prefix="/api", tags=["matching"])    # Feature 3 — Person A
 app.include_router(simulate.router, prefix="/api", tags=["simulation"])  # Feature 4 — Person D
 
 

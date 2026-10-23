@@ -143,11 +143,11 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 
 ### Feature 1 Goals
 
-- [ ] Users can upload a CV (PDF) or fill out a form/questionnaire
-- [ ] System extracts skills in a structured manner using Structured Outputs (no free-form text)
-- [ ] Every extracted skill is mapped to an `esco_id` from the ESCO dataset
+- [x] Users can upload a CV (PDF) or fill out a form/questionnaire
+- [x] System extracts skills in a structured manner using Structured Outputs (no free-form text)
+- [x] Every extracted skill is mapped to an `esco_id` from the ESCO dataset
 - [x] User profile is persisted as standardized JSON in the database
-- [ ] Profile embedding vectors (dense + sparse) computed and stored for Feature 3
+- [x] Profile embedding vectors (dense + sparse) computed and stored for Feature 3
 
 ---
 
@@ -171,12 +171,12 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 > ⏳ **Blocking Dependency:** None (Starts Day 1-2)  
 > 🚀 **Unblocks:** Person B (Substep 1.3 - feeds raw text into structured extractor)
 
-- [ ] Implement PDF parser using `pdfplumber` (Python)
+- [x] Implement PDF parser using `pdfplumber` (Python)
   - **Rationale:** pdfplumber uses pure-Python geometric character analysis (pdfminer.six), achieving high-precision table/column layout reconstruction from multi-column resumes. MIT license is fully compatible with Apache 2.0 repository requirements.
   - **Rejected alternatives:** PyMuPDF (AGPL-3.0 — license viral effect, incompatible with public Apache 2.0 repo); Kreuzberg (secondary option only if OCR/scanned PDF is needed)
-- [ ] Build fallback form/questionnaire if user has no CV (manual entry: skills, years of experience, interests)
-- [ ] Validate raw text extraction from PDF uploads
-- [ ] Handle async loading in UI (loading skeletons) to mask pdfplumber's ~8-15s/100-page latency
+- [x] Build fallback form/questionnaire if user has no CV (manual entry: skills, years of experience, interests)
+- [x] Validate raw text extraction from PDF uploads
+- [x] Handle async loading in UI (loading skeletons) to mask pdfplumber's ~8-15s/100-page latency
 
 #### 1.3 - Structured Output Extraction (Primary Algorithm: Pydantic Structured Outputs) [Person B - AI/ML Engineer]
 
@@ -184,15 +184,15 @@ When executing any step, consult this matrix before proceeding. If a prerequisit
 > ⏳ **Blocking Dependency:** Waits for **Person A (Substep 1.1)** [ESCO database seeded] AND **Person B (Substep 1.2)** [raw CV text extracted]  
 > 🚀 **Unblocks:** Person B (Substep 1.4 - vector embedding), Person A (Substep 3.4 - user skill gap comparison)
 
-- [ ] Set up Pydantic schema (Python) or Zod schema (TypeScript) with 3 mandatory categories:
-  - [ ] `hard_skills` (e.g., Python, SQL, Machine Learning)
-  - [ ] `soft_skills` (e.g., Stakeholder Management, Communication)
-  - [ ] `experience_years` (integer)
-- [ ] Send extracted CV text to LLM with Structured Output instructions (output MUST be rigid JSON, never conversational prose)
-  - LLM acts solely as a **Named Entity Recognition agent** — no free-form narration
-- [ ] Record a `confidence_score` for each mapping; if confidence is low, do not force an ESCO ID assignment
-- [ ] Validate output: ensure each skill resolves to a valid `esco_id` in the ESCO table
-- [ ] Pydantic schema → PostgreSQL column compatibility eliminates intermediate data cleaning layers
+- [x] Set up Pydantic schema (Python) or Zod schema (TypeScript) with 3 mandatory categories:
+  - [x] `hard_skills` (e.g., Python, SQL, Machine Learning)
+  - [x] `soft_skills` (e.g., Stakeholder Management, Communication)
+  - [x] `experience_years` (integer)
+- [x] Send extracted CV text to LLM / NER agent with Structured Output instructions (output MUST be rigid JSON, never conversational prose)
+  - NER extractor acts solely as a **Named Entity Recognition agent** — no free-form narration
+- [x] Record a `confidence_score` for each mapping; if confidence is low, do not force an ESCO ID assignment
+- [x] Validate output: ensure each skill resolves to a valid `esco_id` in the ESCO table
+- [x] Pydantic schema → PostgreSQL column compatibility eliminates intermediate data cleaning layers
 
 #### 1.4 - Text Embedding (BGE-M3 Dense + Sparse Embeddings via RunPod) [Person B - AI/ML Engineer]
 

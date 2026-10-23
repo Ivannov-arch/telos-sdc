@@ -3,3 +3,6 @@ uvicorn[standard]
 supabase
 python-dotenv
 pydantic
+pdfplumber
+python-multipart
+requests
