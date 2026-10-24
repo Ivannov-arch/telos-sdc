@@ -12,7 +12,7 @@
 
 import type { NextRequest } from "next/server";
 
-const BACKEND_URL = (process.env.BACKEND_URL ?? "http://127.0.0.1:8000").replace(/\/$/, "");
+const BACKEND_URL = (process.env.BACKEND_URL ?? "https://telos-sdc.onrender.com").replace(/\/$/, "");
 
 async function proxy(
   request: NextRequest,
@@ -49,7 +49,7 @@ async function proxy(
     });
   } catch {
     return Response.json(
-      { detail: "The backend API is not reachable. Make sure the Backend API workflow is running." },
+      { detail: "The Render backend is not reachable. Check the Render service and BACKEND_URL configuration." },
       { status: 502 },
     );
   }

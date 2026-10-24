@@ -2,7 +2,7 @@ modules = ["python-3.12", "bash", "nodejs-24"]
 
 [nix]
 channel = "stable-25_05"
-packages = ["libxcrypt"]
+packages = ["cacert", "libxcrypt"]
 
 [agent]
 expertMode = true
@@ -19,9 +19,6 @@ author = "agent"
 task = "workflow.run"
 args = "Start application"
 
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Backend API"
 
 [[workflows.workflow]]
 name = "Start application"
@@ -52,9 +49,31 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
+localPort = 5100
+externalPort = 3000
+
+[[ports]]
+localPort = 5101
+externalPort = 3002
+
+[[ports]]
 localPort = 8000
 externalPort = 8000
 
 [[ports]]
 localPort = 23636
 externalPort = 3001
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["bash", "scripts/start-prod.sh"]
+build = ["bash", "-lc", "npm --prefix src/frontend ci && npm --prefix src/frontend run build"]
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 180000
+
+[userenv]
+
+[userenv.shared]
+BACKEND_URL = "https://telos-sdc.onrender.com"
