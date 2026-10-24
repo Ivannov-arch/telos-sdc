@@ -19,9 +19,6 @@ author = "agent"
 task = "workflow.run"
 args = "Start application"
 
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Backend API"
 
 [[workflows.workflow]]
 name = "Start application"
@@ -75,3 +72,8 @@ build = ["bash", "-lc", "npm --prefix src/frontend ci && npm --prefix src/fronte
 [postMerge]
 path = "scripts/post-merge.sh"
 timeoutMs = 180000
+
+[userenv]
+
+[userenv.shared]
+BACKEND_URL = "https://telos-sdc.onrender.com"
