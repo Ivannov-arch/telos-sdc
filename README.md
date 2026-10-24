@@ -3,6 +3,9 @@
 > **Telos** is an interactive simulation platform that evaluates human–AI decision-making under crisis to generate authentic behavioral skill profiles and personalized career pathways.
 
 ![Telos Simulation Demo](docs/preview.png)
+![Result page demo](docs/result_page.png)
+![Role Matching Result Demo](docs/role_matching.png)
+**Project Website Link**: https://telospath.replit.app/
 
 ---
 
