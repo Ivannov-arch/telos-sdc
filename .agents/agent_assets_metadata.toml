@@ -14,3 +14,17 @@ mtime_ms = 1792772395781
 storage_uri = "gcs://replit-rams-assets-pike/rams/assets/repl:b99c1694-966d-4be2-b07b-684f0cd46ce2/73f06345-d2ca-40c7-9973-780866db5c2f/25e13322-c667-4431-9f97-a9074a65fecc"
 storage_version_token = "1792772557731857"
 content_type = "text/html"
+
+[[outputs]]
+id = "S2OmP108Kc1yBbjYJEJpL"
+uri = "file://generated-artifacts/Aiversecity-FutureProof.pptx"
+type = "slides"
+title = "Aiversecity FutureProof — PowerPoint"
+description = "A 10-slide editable PowerPoint styled to match the frontend’s navy, pale-yellow, and warm-neutral palette. Includes the supplied dashboard screenshot; slide 5 flags statistics that need source verification."
+logical_id = "96fc9492-1969-4c98-bca9-56a32bd51a20"
+content_hash = "sha256:f419851672421752a21cd0d6e717cfff60c6b58138cff4b12d820c1aeb2ba859"
+size = 107756
+mtime_ms = 1792847872043
+storage_uri = "gcs://replit-rams-assets-pike/rams/assets/repl:b99c1694-966d-4be2-b07b-684f0cd46ce2/96fc9492-1969-4c98-bca9-56a32bd51a20/d3455b61-5435-4e93-8995-7be0b476040d"
+storage_version_token = "1792847906414175"
+content_type = "application/vnd.openxmlformats-officedocument.presentationml.presentation"
