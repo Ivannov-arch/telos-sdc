@@ -38,14 +38,19 @@ RUNPOD_BGE_M3_URL = os.getenv("RUNPOD_BGE_M3_URL", "")
 # ── Pydantic Schemas (Substep 1.3) ──────────────────────────────────────────
 
 class SkillEntry(BaseModel):
-    skill_name: str
+    skill_name: str = ""
     label: str | None = None
     esco_id: Optional[str] = None          # None if confidence is below threshold
     confidence_score: float = 0.0          # 0.0 – 1.0
 
     def model_post_init(self, __context):
-        if not self.label:
+        if not self.label and self.skill_name:
             self.label = self.skill_name
+        elif not self.skill_name and self.label:
+            self.skill_name = self.label
+        elif not self.skill_name and not self.label:
+            self.skill_name = "Skill"
+            self.label = "Skill"
 
 
 class ProfileFormRequest(BaseModel):
@@ -525,27 +530,69 @@ def get_user_profile(user_id: str):
     Retrieve a saved profile by UUID.
     """
     db = get_supabase()
-    resp = (
-        db.schema("telos_sdc")
-        .table("user_profiles")
-        .select("id, hard_skills, soft_skills, experience_years, source_type, user_dense_vector")
-        .eq("id", user_id)
-        .maybe_single()
-        .execute()
-    )
+
+    # Select only lightweight columns — skip user_dense_vector (1024-dim pgvector)
+    # which is huge and causes PostgREST serialization / timeout errors.
+    try:
+        resp = (
+            db.schema("telos_sdc")
+            .table("user_profiles")
+            .select("id, hard_skills, soft_skills, experience_years, source_type")
+            .eq("id", user_id)
+            .maybe_single()
+            .execute()
+        )
+    except Exception as e:
+        logger.error(f"Supabase query failed for profile {user_id!r}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=f"Database query failed: {e}",
+        )
+
     if not resp or not getattr(resp, "data", None):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User profile {user_id!r} not found")
 
     data = resp.data
-    hard_skills = [SkillEntry(**s) for s in (data.get("hard_skills") or [])]
-    soft_skills = [SkillEntry(**s) for s in (data.get("soft_skills") or [])]
+
+    # Lightweight check: does the vector column have a value?
+    has_vector = False
+    try:
+        vec_resp = (
+            db.schema("telos_sdc")
+            .table("user_profiles")
+            .select("id")
+            .eq("id", user_id)
+            .not_("user_dense_vector", "is", "null")
+            .maybe_single()
+            .execute()
+        )
+        has_vector = bool(vec_resp and getattr(vec_resp, "data", None))
+    except Exception as e:
+        logger.warning(f"Vector existence check failed for {user_id!r}: {e}")
+
+    def _parse_skill(s) -> SkillEntry:
+        if isinstance(s, str):
+            return SkillEntry(skill_name=s, label=s, confidence_score=1.0)
+        if isinstance(s, dict):
+            name = s.get("skill_name") or s.get("label") or "Skill"
+            lbl = s.get("label") or name
+            return SkillEntry(
+                skill_name=name,
+                label=lbl,
+                esco_id=s.get("esco_id"),
+                confidence_score=float(s.get("confidence_score") or 0.0),
+            )
+        return SkillEntry(skill_name=str(s), label=str(s))
+
+    hard_skills = [_parse_skill(s) for s in (data.get("hard_skills") or [])]
+    soft_skills = [_parse_skill(s) for s in (data.get("soft_skills") or [])]
 
     return UserProfileResponse(
         id=data["id"],
         hard_skills=hard_skills,
         soft_skills=soft_skills,
-        experience_years=data.get("experience_years", 0),
-        source_type=data.get("source_type", "form"),
-        has_dense_vector=data.get("user_dense_vector") is not None,
+        experience_years=data.get("experience_years", 0) or 0,
+        source_type=data.get("source_type", "form") or "form",
+        has_dense_vector=has_vector,
         message="Profile retrieved",
     )

@@ -1,58 +1,69 @@
 # Running on Replit
 
-This import is a Python FastAPI backend, not a frontend application. Keep the
-existing source layout under `src/` and the existing Supabase/Runpod services.
+This project is a Python FastAPI backend (`src/backend`) plus a Next.js 16 +
+Tailwind v4 frontend (`src/frontend`). Keep the existing source layout under
+`src/` and the existing Supabase/Runpod services.
 
-## Start
+## Workflows
 
-Use the **Start application** workflow (the Run button):
+- **Start application** (Run button, preview on port 5000):
+  `cd src/frontend && npx next dev --hostname 0.0.0.0 --port 5000`
+- **Backend API** (console, port 8000):
+  `uv run uvicorn backend.main:app --app-dir src --host 0.0.0.0 --port 8000`
 
-```sh
-uv run uvicorn backend.main:app --app-dir src --host 0.0.0.0 --port 5000
-```
+Both must be running. Python dependencies live in the root `pyproject.toml` /
+`uv.lock` (mirroring `src/backend/requirements.txt`); frontend dependencies in
+`src/frontend/package.json` (`npm install` inside `src/frontend`).
 
-Dependencies are installed through the root `pyproject.toml` and `uv.lock`,
-matching the packages in `src/backend/requirements.txt`. `uv run` restores them
-if needed. Python 3.12 is configured in `.replit`.
+The backend root `/` redirects to its interactive docs at `/docs`; `/health`
+checks only that the API process is alive.
 
-The preview opens the interactive API documentation at `/docs` via a root
-redirect. `/health` checks that the API process is alive; it does not check
-database connectivity. The OpenAPI schema is at `/openapi.json`.
+## Frontend architecture
 
-## External services
+- App Router under `src/frontend/src/app`. Pages: `/`, `/profiles`,
+  `/profile/new`, `/profile/[id]`, `/match/[id]`, `/simulate`,
+  `/simulate/[taskId]`. The "active profile" is remembered in localStorage.
+- The main product is the crisis simulation game: `/play` (mission + quick
+  profile), `/play/[sessionId]` (4-round control room), `.../report`,
+  `.../roles`, `.../pathway/[roleId]`, and `/results` (sessions saved in
+  localStorage). The profile/match/practice pages are secondary "More tools".
+- The proxy targets `BACKEND_URL` (default local backend). The hosted backend
+  at https://telos-sdc.onrender.com needs its own `API_ACCESS_TOKEN`.
+- All browser data access goes through the typed client
+  `src/frontend/src/lib/api.ts`, which calls the server-side proxy
+  `src/frontend/src/app/api/backend/[...path]/route.ts`. The proxy forwards to
+  `BACKEND_URL` (default `http://127.0.0.1:8000`) and attaches the
+  `API_ACCESS_TOKEN` bearer token. **Never expose that token to the browser.**
+- `next.config.ts` sets `allowedDevOrigins` for the Replit preview domains (and
+  `127.0.0.1` for local checks). Next's dev runtime does not hydrate until its
+  HMR socket connects, so a blocked origin shows a page stuck in loading state.
+- Styling: Tailwind v4 is wired through a Turbopack `*.css` loader rule in
+  `next.config.ts`; that rule also captures `*.module.css`, so CSS Modules do
+  not work here. Use global classes in `src/app/globals.css` instead. If
+  stylesheet edits do not appear after a restart, delete `src/frontend/.next`
+  (Turbopack's persistent cache) and restart.
+- Checks: `cd src/frontend && npx tsc --noEmit && npx eslint .`
 
-Configure the existing service values in Replit Secrets; never commit them:
+## External services (Replit Secrets; never commit)
 
-- `API_ACCESS_TOKEN`: a long random token used only by trusted operators.
-  All `/api/*` routes require `Authorization: Bearer <token>`. Use **Authorize**
-  in `/docs` to enter it for manual testing. Missing server configuration disables
-  the data API with HTTP 503; missing or invalid caller tokens return HTTP 401.
-  This is a private, shared-operator API, not multi-user authentication. Do not
-  distribute this token to untrusted clients or embed it in browser application
-  code. Individual sign-in and per-profile ownership checks are required before
-  allowing ordinary users to access profile or simulation data.
+- `API_ACCESS_TOKEN`: long random token for the trusted-operator API. All
+  backend `/api/*` routes require `Authorization: Bearer <token>`; the frontend
+  proxy supplies it server-side. Missing server config → 503; bad token → 401.
+  This is a private shared-operator boundary, not multi-user auth. Individual
+  sign-in and per-profile ownership checks are required before ordinary users
+  may access profile or simulation data.
 - `SUPABASE_URL`: the existing Supabase project URL.
-- `SUPABASE_SECRET_KEY`: the existing server-side Supabase secret/service key.
-- `RUNPOD_API_KEY`: the key for the existing Runpod endpoints.
-- `RUNPOD_BGE_M3_URL`: the existing BGE-M3 inference endpoint URL.
-- `RUNPOD_LLM_ENDPOINT_URL` (optional; `RUNPOD_LLM_URL` is also supported):
-  the existing LLM evaluator endpoint URL.
+- `SUPABASE_SECRET_KEY`: must be the project's **secret** key
+  (`sb_secret_…` or legacy `service_role` JWT). A publishable key
+  (`sb_publishable_…`) allows reads only; writes then fail with a row-level
+  security error (the backend reports this as HTTP 502 with an explanation).
+- `RUNPOD_API_KEY`, `RUNPOD_BGE_M3_URL`: existing Runpod BGE-M3 endpoint.
+- `RUNPOD_LLM_ENDPOINT_URL` (optional; `RUNPOD_LLM_URL` also accepted): LLM
+  evaluator. Without it the deterministic rubric evaluator is used.
 
-Startup, docs, and health work without these values. Profile persistence,
-matching, and simulation data require Supabase, with the `telos_sdc` schema and
-seed data described in `src/supabase/` and `src/docs/DATASETS.md`. No database
-schema or seed changes are applied automatically by the workflow.
+## Data state (as of setup)
 
-Without the Runpod embedding settings the imported code skips vector generation.
-Without the optional LLM evaluator it uses its existing deterministic rubric
-evaluator. Full service-backed behavior requires real service settings and seeded
-matching data.
-
-## Setup verification
-
-With the supplied settings, read-only checks confirmed Supabase access to skills,
-occupations, profiles, simulation tasks, and matching tables. The simulation-task
-API and Runpod endpoint health check returned HTTP 200. The existing
-`role_required_skills`, `role_vectors`, and `role_sdg` tables were empty during
-setup, so complete matching results require further data preparation. No seed
-scripts, profile writes, or GPU inference jobs were run during setup.
+Supabase `telos_sdc` has skills, occupations, simulation tasks and role data
+seeded; matching returns real roles with skill gaps and SDG alignment. One
+smoke-test profile ("Smoke-test profile created during frontend setup") was
+created during setup and can be deleted. Backend tests: `uv run python -m unittest discover -s src -p "test_api_access.py"`.

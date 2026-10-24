@@ -235,7 +235,7 @@ def get_match(
     profile      = profile_resp.data
     experience   = profile.get("experience_years", 0)
     hard_skills  = profile.get("hard_skills") or []
-    user_skill_ids = {s["esco_id"] for s in hard_skills if s.get("esco_id")}
+    user_skill_ids = {s.get("esco_id") for s in hard_skills if isinstance(s, dict) and s.get("esco_id")}
 
     dense_vec  = profile.get("user_dense_vector")
     sparse_vec = profile.get("user_sparse_vector")
