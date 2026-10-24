@@ -28,3 +28,17 @@ mtime_ms = 1792847872043
 storage_uri = "gcs://replit-rams-assets-pike/rams/assets/repl:b99c1694-966d-4be2-b07b-684f0cd46ce2/96fc9492-1969-4c98-bca9-56a32bd51a20/d3455b61-5435-4e93-8995-7be0b476040d"
 storage_version_token = "1792847906414175"
 content_type = "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+
+[[outputs]]
+id = "_OsqOmURUbdpolwRwZRjJ"
+uri = "file://generated-artifacts/Aiversecity-FutureProof.pdf"
+type = "pdf"
+title = "Aiversecity FutureProof — PDF"
+description = "10-page, widescreen PDF export of the FutureProof presentation. Rendered at 180 DPI; the original PPTX remains the editable version."
+logical_id = "e15ec176-875e-4fcb-9976-c204cdbc4049"
+content_hash = "sha256:0b5fc81a0e74ebdfa9ef5da94d2be94e5375aa6969bc1cde788c67ef140c1839"
+size = 2954100
+mtime_ms = 1792848066475
+storage_uri = "gcs://replit-rams-assets-pike/rams/assets/repl:b99c1694-966d-4be2-b07b-684f0cd46ce2/e15ec176-875e-4fcb-9976-c204cdbc4049/6d3cd37a-33a4-42a8-a24f-018ec62a80e0"
+storage_version_token = "1792848080884126"
+content_type = "application/pdf"
