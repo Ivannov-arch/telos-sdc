@@ -9,6 +9,21 @@ import { ErrorState, Icon, Loading, PageIntro } from "@/components/ui";
 
 const parse = (text: string) => [...new Set(text.split(/[,;\n]/).map((s) => s.trim()).filter(Boolean))];
 
+const SKILL_OPTIONS = ["Python", "Data analysis", "SQL", "Excel", "Communication", "Project management", "Problem solving", "Teamwork", "Leadership", "Research", "Writing", "Design", "Marketing", "Customer service", "Critical thinking", "Machine learning"];
+const INTEREST_OPTIONS = ["Logistics", "Climate", "Finance", "Healthcare", "Education", "Energy", "Technology", "Government", "Agriculture", "Sustainability"];
+
+/** Add the item to a comma-separated list, or remove it if it is already there (case-insensitive). */
+function toggleItem(text: string, item: string) {
+  const list = parse(text);
+  const has = list.some((x) => x.toLowerCase() === item.toLowerCase());
+  return (has ? list.filter((x) => x.toLowerCase() !== item.toLowerCase()) : [...list, item]).join(", ");
+}
+
+function QuickPicks({ label, options, value, onToggle }: { label: string; options: string[]; value: string; onToggle: (item: string) => void }) {
+  const chosen = parse(value).map((x) => x.toLowerCase());
+  return <div className="quick-picks" role="group" aria-label={label}><small>Quick picks</small><div className="chip-row">{options.map((o) => { const on = chosen.includes(o.toLowerCase()); return <button key={o} type="button" className={`chip ${on ? "on" : ""}`} aria-pressed={on} onClick={() => onToggle(o)}>{on ? <Icon name="check" size={11} /> : <Icon name="plus" size={11} />}{o}</button>; })}</div></div>;
+}
+
 function SetupForm() {
   const router = useRouter();
   const params = useSearchParams();
@@ -53,8 +68,8 @@ function SetupForm() {
         <div className="eyebrow" style={{ color: "var(--muted)", marginBottom: 12 }}>STEP 2 OF 2 · QUICK SKILL PROFILE</div>
         <h2>Tell us what you think you’re good at.</h2>
         <p className="helper">Under two minutes. No CV and no login. We’ll compare this with how you actually decide.</p>
-        <div className="field"><label htmlFor="skills">Your skills</label><textarea id="skills" value={skills} onChange={(e) => setSkills(e.target.value)} placeholder="Python, data analysis, communication, project management" style={{ minHeight: 96 }} /><small>Separate skills with commas or put each on a new line.</small></div>
-        <div className="field"><label htmlFor="interests">Career interests <span style={{ fontWeight: 400, color: "var(--muted)" }}>(optional)</span></label><input id="interests" value={interests} onChange={(e) => setInterests(e.target.value)} placeholder="Logistics, climate, finance" /></div>
+        <div className="field"><label htmlFor="skills">Your skills</label><textarea id="skills" value={skills} onChange={(e) => setSkills(e.target.value)} placeholder="Python, data analysis, communication, project management" style={{ minHeight: 96 }} /><QuickPicks label="Quick skill picks" options={SKILL_OPTIONS} value={skills} onToggle={(i) => setSkills((t) => toggleItem(t, i))} /><small>Tap to add, or type your own. Separate skills with commas or put each on a new line.</small></div>
+        <div className="field"><label htmlFor="interests">Career interests <span style={{ fontWeight: 400, color: "var(--muted)" }}>(optional)</span></label><input id="interests" value={interests} onChange={(e) => setInterests(e.target.value)} placeholder="Logistics, climate, finance" /><QuickPicks label="Quick interest picks" options={INTEREST_OPTIONS} value={interests} onToggle={(i) => setInterests((t) => toggleItem(t, i))} /></div>
         <div className="field"><label htmlFor="hours">Hours per week you could spend learning</label><input id="hours" type="number" inputMode="numeric" min={1} max={40} step={1} value={hours} onChange={(e) => setHours(e.target.value)} style={{ maxWidth: 140 }} /></div>
         {error && <ErrorState message={error} />}
         <div className="actions"><button type="submit" className="btn lime">{starting ? "Opening the control room…" : "Enter the control room"}{!starting && <Icon size={16} />}</button></div>
