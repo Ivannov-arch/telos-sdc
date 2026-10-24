@@ -1,5 +1,5 @@
 /**
- * Typed client for the Aiversecity backend, called from the browser through
+ * Typed client for the Telos backend, called from the browser through
  * the Next.js proxy at /api/backend/* (see src/app/api/backend/[...path]/route.ts).
  *
  * Every function throws an ApiError with the backend's `detail` message when
