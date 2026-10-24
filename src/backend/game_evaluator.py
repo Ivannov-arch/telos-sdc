@@ -172,8 +172,11 @@ def _evaluate_with_gemini(r1_text: str, r3_text: str, mission_id: str) -> dict |
         return None
     try:
         import httpx
-        prompt = _build_eval_prompt(r1_text, r3_text, mission_id)
-        for model in ["gemini-2.5-flash", "gemini-flash-latest"]:
+        selected_model = os.environ.get("GEMINI_MODEL", "gemini-3.8-pro")
+        model_candidates = [selected_model, "gemini-1.5-pro", "gemini-2.0-flash", "gemini-2.5-flash", "gemini-1.5-flash"]
+        # Remove duplicates while preserving order
+        unique_models = list(dict.fromkeys(model_candidates))
+        for model in unique_models:
             url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
             resp = httpx.post(
                 url,
