@@ -29,10 +29,10 @@
 | GitHub Repository     | https://github.com/Ivannov-arch/telos-sdc      |
 | Replit Project        | https://replit.com/@devnyxl/telos-sdc          |
 | Live Demo             | https://telospath.replit.app                   |
-| RunPod BGE-M3 Endpoint| `RUNPOD_BGE_M3_URL`                           |
+| RunPod BGE-M3 Endpoint| `RUNPOD_BGE_M3_URL`                            |
 | RunPod LLM Endpoint   | `RUNPOD_LLM_ENDPOINT_URL`                      |
 | Supabase Project      | https://supabase.com/dashboard/project/xknjmvfbgghnrujnjhoo|
-| Slide Deck            | https://canva.link/0zaa61ydhwlq8uz                |
+| Slide Deck            | https://canva.link/0zaa61ydhwlq8uz               |
 | Demo Video            | https://youtu.be/ajJs44XIqno?si=Xx8YH0mSdkSs6P7E |
 
 ---
@@ -46,7 +46,7 @@ The backend requires the following environment variables to connect to RunPod an
 | `RUNPOD_API_KEY`          | RunPod API authentication          |
 | `RUNPOD_BGE_M3_URL`       | BGE-M3 embedding endpoint          |
 | `RUNPOD_LLM_URL`          | LLM inference endpoint             |
-| `RUNPOD_LLM_ENDPOINT_URL` | LLM endpoint configuration        n|
+| `RUNPOD_LLM_ENDPOINT_URL` | LLM endpoint configuration         |
 | `SUPABASE_URL`            | Supabase project URL               |
 | `SUPABASE_SECRET_KEY`     | Supabase server-side secret key    |
 
