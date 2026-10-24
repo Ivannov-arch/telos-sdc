@@ -157,6 +157,221 @@ MVP_ROLES = [
             },
         ],
     },
+    {
+        "id": "emergency_logistics_coordinator",
+        "title": "Emergency Logistics & Supply Chain Coordinator",
+        "esco_id": "esco:4321",
+        "description": "Orchestrates critical relief supply chains, allocates constrained distribution resources, and navigates acute route bottlenecks during systemic disruptions.",
+        "skill_focus": ["Supply chain continuity", "Crisis resource allocation", "Operational routing"],
+        "indicator_weights": {
+            "decision_quality": 0.35,
+            "adaptability": 0.35,
+            "critical_verification": 0.20,
+            "calibrated_ai_trust": 0.10,
+        },
+        "mission_affinity": {"A": 0.15, "B": 0.00, "C": 0.05},
+        "interest_keywords": [
+            "logistics", "supply chain", "agriculture", "food", "transportation",
+            "operations", "distribution", "emergency", "inventory", "procurement",
+        ],
+        "skill_keywords": [
+            "project management", "problem solving", "leadership", "logistics",
+            "teamwork", "communication", "operations", "resource planning",
+        ],
+        "skill_gaps_template": [
+            {"skill": "Emergency Supply Chain Resilience & Routing", "urgency": "high", "type": "core"},
+            {"skill": "Crisis Resource Allocation & Budgeting", "urgency": "high", "type": "core"},
+            {"skill": "Humanitarian Logistics Standards (Sphere / UN)", "urgency": "medium", "type": "core"},
+            {"skill": "Fleet & Multi-Modal Freight Optimization", "urgency": "medium", "type": "supporting"},
+            {"skill": "Cross-Agency Stakeholder Coordination", "urgency": "low", "type": "supporting"},
+        ],
+        "sdg_goals": [
+            {
+                "sdg_goal": 2,
+                "sdg_name": "Zero Hunger",
+                "impact_reasoning": "Secures resilient food delivery channels and prevents famine during systemic transport breakdowns.",
+                "source": "UNSD SDG API",
+            },
+            {
+                "sdg_goal": 12,
+                "sdg_name": "Responsible Consumption and Production",
+                "impact_reasoning": "Minimizes food loss and waste across emergency supply chains through optimized distribution.",
+                "source": "UNSD SDG API",
+            },
+        ],
+    },
+    {
+        "id": "public_policy_advisor",
+        "title": "Public Policy & Government Technology Advisor",
+        "esco_id": "esco:2422",
+        "description": "Analyzes civic impact of automated systems, drafts regulatory safeguards, and ensures public service algorithms uphold citizen rights and equitable access.",
+        "skill_focus": ["Civic impact analysis", "Algorithmic accountability", "Legislative drafting"],
+        "indicator_weights": {
+            "calibrated_ai_trust": 0.35,
+            "critical_verification": 0.30,
+            "decision_quality": 0.20,
+            "adaptability": 0.15,
+        },
+        "mission_affinity": {"A": 0.05, "B": 0.15, "C": 0.05},
+        "interest_keywords": [
+            "government", "policy", "public", "civic", "regulation", "law",
+            "democracy", "administration", "diplomacy", "public service",
+        ],
+        "skill_keywords": [
+            "communication", "writing", "research", "critical thinking",
+            "policy", "ethics", "leadership", "stakeholder management",
+        ],
+        "skill_gaps_template": [
+            {"skill": "Public Sector Algorithmic Governance", "urgency": "high", "type": "core"},
+            {"skill": "Equitable Policy Impact Assessment", "urgency": "high", "type": "core"},
+            {"skill": "Civic Data Ethics & Transparency", "urgency": "medium", "type": "core"},
+            {"skill": "Public Consultation & Stakeholder Engagement", "urgency": "medium", "type": "supporting"},
+            {"skill": "Crisis Communication for Public Institutions", "urgency": "low", "type": "supporting"},
+        ],
+        "sdg_goals": [
+            {
+                "sdg_goal": 16,
+                "sdg_name": "Peace, Justice and Strong Institutions",
+                "impact_reasoning": "Fosters transparent, inclusive, and accountable public decision-making frameworks.",
+                "source": "UNSD SDG API",
+            },
+            {
+                "sdg_goal": 10,
+                "sdg_name": "Reduced Inequalities",
+                "impact_reasoning": "Protects marginalized communities from algorithmic discrimination in social safety and public welfare programs.",
+                "source": "UNSD SDG API",
+            },
+        ],
+    },
+    {
+        "id": "sustainable_finance_risk_manager",
+        "title": "Sustainable Finance & Risk Manager",
+        "esco_id": "esco:2412",
+        "description": "Audits financial risk frameworks, stress-tests institutional credit models against bias and systemic shocks, and steers investments toward sustainable capital projects.",
+        "skill_focus": ["Systemic risk assessment", "Credit fairness auditing", "ESG portfolio integration"],
+        "indicator_weights": {
+            "critical_verification": 0.35,
+            "decision_quality": 0.30,
+            "calibrated_ai_trust": 0.25,
+            "adaptability": 0.10,
+        },
+        "mission_affinity": {"A": 0.00, "B": 0.15, "C": 0.05},
+        "interest_keywords": [
+            "finance", "banking", "esg", "investment", "risk", "economics",
+            "sustainability", "capital", "markets", "accounting", "portfolio",
+        ],
+        "skill_keywords": [
+            "excel", "data analysis", "critical thinking", "problem solving",
+            "risk", "finance", "compliance", "research", "statistics",
+        ],
+        "skill_gaps_template": [
+            {"skill": "ESG Risk Scoring & Disclosure Standards", "urgency": "high", "type": "core"},
+            {"skill": "Financial Model Validation & Bias Auditing", "urgency": "high", "type": "core"},
+            {"skill": "Systemic Stress Testing Methodologies", "urgency": "medium", "type": "core"},
+            {"skill": "Sustainable Capital Allocation Frameworks", "urgency": "medium", "type": "supporting"},
+            {"skill": "Regulatory Financial Compliance (Basel / TCFD)", "urgency": "low", "type": "supporting"},
+        ],
+        "sdg_goals": [
+            {
+                "sdg_goal": 8,
+                "sdg_name": "Decent Work and Economic Growth",
+                "impact_reasoning": "Promotes sound, inclusive financial systems that drive equitable economic productivity.",
+                "source": "UNSD SDG API",
+            },
+            {
+                "sdg_goal": 10,
+                "sdg_name": "Reduced Inequalities",
+                "impact_reasoning": "Eliminates systemic underwriting and credit bias across lending institutions.",
+                "source": "UNSD SDG API",
+            },
+        ],
+    },
+    {
+        "id": "climate_resilience_lead",
+        "title": "Climate Resilience & Energy Transition Lead",
+        "esco_id": "esco:2133",
+        "description": "Develops regional grid decarbonization plans, evaluates environmental vulnerability to extreme shocks, and designs climate-resilient infrastructure systems.",
+        "skill_focus": ["Vulnerability mapping", "Grid decarbonization strategy", "Environmental risk mitigation"],
+        "indicator_weights": {
+            "decision_quality": 0.35,
+            "adaptability": 0.30,
+            "critical_verification": 0.20,
+            "calibrated_ai_trust": 0.15,
+        },
+        "mission_affinity": {"A": 0.05, "B": 0.00, "C": 0.15},
+        "interest_keywords": [
+            "climate", "energy", "sustainability", "environment", "renewable",
+            "infrastructure", "green", "carbon", "ecology", "conservation",
+        ],
+        "skill_keywords": [
+            "research", "data analysis", "problem solving", "critical thinking",
+            "leadership", "project management", "systems thinking",
+        ],
+        "skill_gaps_template": [
+            {"skill": "Climate Vulnerability Assessment & Scenario Modelling", "urgency": "high", "type": "core"},
+            {"skill": "Renewable Energy Grid Integration & Storage", "urgency": "high", "type": "core"},
+            {"skill": "Carbon Accounting & Greenhouse Gas Protocols", "urgency": "medium", "type": "core"},
+            {"skill": "Environmental Disaster Preparedness Planning", "urgency": "medium", "type": "supporting"},
+            {"skill": "Community Resilience Stakeholder Engagement", "urgency": "low", "type": "supporting"},
+        ],
+        "sdg_goals": [
+            {
+                "sdg_goal": 7,
+                "sdg_name": "Affordable and Clean Energy",
+                "impact_reasoning": "Accelerates the transition to reliable, modern, and renewable energy grids.",
+                "source": "UNSD SDG API",
+            },
+            {
+                "sdg_goal": 13,
+                "sdg_name": "Climate Action",
+                "impact_reasoning": "Builds operational adaptive capacity and strengthens resilience against climate-related hazards.",
+                "source": "UNSD SDG API",
+            },
+        ],
+    },
+    {
+        "id": "digital_health_operations_lead",
+        "title": "Digital Health Operations Specialist",
+        "esco_id": "esco:2263",
+        "description": "Optimizes clinical service continuity during medical surges, audits diagnostic decision-support tools for safety, and safeguards patient data privacy.",
+        "skill_focus": ["Clinical workflow continuity", "Medical decision-support auditing", "Patient data governance"],
+        "indicator_weights": {
+            "decision_quality": 0.35,
+            "critical_verification": 0.30,
+            "adaptability": 0.20,
+            "calibrated_ai_trust": 0.15,
+        },
+        "mission_affinity": {"A": 0.05, "B": 0.10, "C": 0.05},
+        "interest_keywords": [
+            "healthcare", "health", "medical", "medicine", "clinical",
+            "hospital", "patient", "biotech", "care", "wellbeing",
+        ],
+        "skill_keywords": [
+            "communication", "teamwork", "problem solving", "customer service",
+            "data analysis", "ethics", "critical thinking", "project management",
+        ],
+        "skill_gaps_template": [
+            {"skill": "Clinical Decision Support Systems (CDSS) Auditing", "urgency": "high", "type": "core"},
+            {"skill": "Hospital Operations & Surge Capacity Management", "urgency": "high", "type": "core"},
+            {"skill": "Healthcare Data Privacy & Interoperability (HIPAA / HL7)", "urgency": "medium", "type": "core"},
+            {"skill": "Biomedical Ethics & Patient Consent Frameworks", "urgency": "medium", "type": "supporting"},
+            {"skill": "Interprofessional Healthcare Team Coordination", "urgency": "low", "type": "supporting"},
+        ],
+        "sdg_goals": [
+            {
+                "sdg_goal": 3,
+                "sdg_name": "Good Health and Well-Being",
+                "impact_reasoning": "Protects patient outcomes and enhances equitable healthcare delivery during emergency surges.",
+                "source": "UNSD SDG API",
+            },
+            {
+                "sdg_goal": 9,
+                "sdg_name": "Industry, Innovation and Infrastructure",
+                "impact_reasoning": "Fosters safe, reliable technological innovation in health infrastructure.",
+                "source": "UNSD SDG API",
+            },
+        ],
+    },
 ]
 
 MISSION_LABEL = {
@@ -308,9 +523,10 @@ def match_from_session(session: dict, indicators: dict) -> list[dict]:
             },
         })
 
-    # Sort by match score descending, assign ranks
+    # Sort by match score descending, assign ranks to top 3 best matches
     results.sort(key=lambda r: r["match_score"], reverse=True)
-    for i, r in enumerate(results):
+    top_results = results[:3]
+    for i, r in enumerate(top_results):
         r["rank"] = i + 1
 
-    return results
+    return top_results
