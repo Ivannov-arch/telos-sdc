@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getEvidence, getGameState, submitRound, type EvidenceResponse, type GameState, type RoundAction, type RoundResponse } from "@/lib/api";
-import { missionById, ROUND_LABELS } from "@/lib/missions";
+import { CHOICES, missionById, ROUND_LABELS } from "@/lib/missions";
 import { useResource } from "@/hooks/use-resource";
 import { ErrorState, Icon, Loading } from "@/components/ui";
 
@@ -83,6 +83,7 @@ function Room({ sessionId, mission, initial }: { sessionId: string; mission: str
   }
 
   const prompt = PROMPTS[round];
+  const choices = m ? CHOICES[m.id][round] ?? [] : [];
   return <div className="control-room reveal">
     <div className="cr-bar"><div className="eyebrow"><span className="status-dot" style={{ background: "var(--lime)" }} /> {m ? `${m.code} · ${m.title}` : "CRISIS SIMULATION"}</div><div className={`advisor ${aiOnline ? "online" : ""}`}><span className="status-dot" />AI ADVISOR · {aiOnline ? "ONLINE" : "LOCKED"}</div></div>
     <RoundTrack round={round} />
@@ -108,7 +109,8 @@ function Room({ sessionId, mission, initial }: { sessionId: string; mission: str
           {busy && <p className="cr-fine" role="status">Recording your decision…</p>}
         </div> : prompt && <form onSubmit={submitText}>
           <label htmlFor="answer" className="cr-question">{prompt.label}</label><p className="cr-fine">{prompt.hint}</p>
-          <textarea id="answer" value={text} onChange={(e) => setText(e.target.value)} disabled={busy} placeholder={prompt.placeholder} style={{ minHeight: 170, marginTop: 14 }} />
+          {choices.length > 0 && <fieldset className="choices"><legend className="eyebrow cr-label">PICK A STARTING POINT, OR WRITE YOUR OWN</legend>{choices.map((c) => <button key={c} type="button" role="radio" aria-checked={text === c} className={`choice ${text === c ? "selected" : ""}`} disabled={busy} onClick={() => { setText(c); setError(null); }}><span className="choice-mark" aria-hidden="true" />{c}</button>)}</fieldset>}
+          <textarea id="answer" value={text} onChange={(e) => setText(e.target.value)} disabled={busy} placeholder={choices.length ? "Edit a choice above, or write your own response…" : prompt.placeholder} style={{ minHeight: 130, marginTop: 14 }} />
           <div className="meta-row cr-meta"><small>{text.trim().length} characters</small><small>No timer. Take the time you need.</small></div>
           <div className="actions"><button type="submit" className="btn lime" disabled={busy}>{busy ? "Committing…" : round === 4 ? "Commit and see what it showed" : "Commit decision"}{!busy && <Icon size={16} />}</button></div>
         </form>}
