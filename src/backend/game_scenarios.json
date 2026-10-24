@@ -1,0 +1,134 @@
+[
+  {
+    "mission_id": "A",
+    "round_number": 1,
+    "briefing_text": "The food supply chain across Southeast Asia has collapsed following simultaneous port disruptions in three countries. You are the crisis response coordinator. Millions are at risk. You have a limited budget and four available distribution routes (North, South, East, West). What is your strategy?",
+    "ai_recommendation": null,
+    "evidence_data": null,
+    "shock_event_text": null,
+    "shock_opportunity": null
+  },
+  {
+    "mission_id": "A",
+    "round_number": 2,
+    "briefing_text": "The AI advisor has analyzed the situation and has a recommendation.",
+    "ai_recommendation": "Route B (Eastern Corridor) is recommended. It is 40% faster than alternatives and covers the highest population density zones. Estimated delivery: 18 hours at current capacity.",
+    "evidence_data": {
+      "title": "Route Capacity Data",
+      "items": [
+        {"label": "Route A (Northern)", "value": "Capacity: 85%, Est. delivery: 22h", "is_critical": false},
+        {"label": "Route B (Eastern)", "value": "Capacity: 97% — WARNING: At limit. Delays likely above 90%.", "is_critical": true},
+        {"label": "Route C (Southern)", "value": "Capacity: 60%, Est. delivery: 26h", "is_critical": false},
+        {"label": "Route D (Western)", "value": "Capacity: 40%, Est. delivery: 30h", "is_critical": false}
+      ]
+    },
+    "shock_event_text": null,
+    "shock_opportunity": null
+  },
+  {
+    "mission_id": "A",
+    "round_number": 3,
+    "briefing_text": "AI Shock Event — Round 3",
+    "ai_recommendation": "I recommend activating the volunteer network immediately. Given the constraints, it is your best and fastest option.",
+    "evidence_data": null,
+    "shock_event_text": "BREAKING: Budget has been cut by 50% effective immediately. Route B is now confirmed over capacity — deliveries via Route B are halted.",
+    "shock_opportunity": "A community volunteer network of 400 logistics workers has just offered assistance. No formal vetting has been completed. The network claims it can cover Routes A and C simultaneously."
+  },
+  {
+    "mission_id": "A",
+    "round_number": 4,
+    "briefing_text": "Final Decision — Round 4. Commit your final distribution strategy. The system will calculate outcomes: population reached, cost, delivery time, and groups most affected. What is your final strategy?",
+    "ai_recommendation": null,
+    "evidence_data": null,
+    "shock_event_text": null,
+    "shock_opportunity": null
+  },
+  {
+    "mission_id": "B",
+    "round_number": 1,
+    "briefing_text": "A financial institution's credit scoring AI has been outputting biased results for 6 months, systematically denying loans to applicants from two demographic groups. You are the ethics response lead. Regulators have been notified. You have limited time and resources. What is your strategy?",
+    "ai_recommendation": null,
+    "evidence_data": null,
+    "shock_event_text": null,
+    "shock_opportunity": null
+  },
+  {
+    "mission_id": "B",
+    "round_number": 2,
+    "briefing_text": "The AI advisor has analyzed the bias incident and has a recommendation.",
+    "ai_recommendation": "Immediately patch the scoring model by re-weighting the training data to correct demographic disparity. Estimated fix timeline: 72 hours. Minimal customer disruption expected.",
+    "evidence_data": {
+      "title": "Technical Audit Log",
+      "items": [
+        {"label": "Root Cause", "value": "Biased feature selection: 3 input features correlate with protected attributes. Re-weighting training data does NOT remove these features.", "is_critical": true},
+        {"label": "Affected customers", "value": "~14,000 loan applications in 6 months", "is_critical": false},
+        {"label": "Patch approach", "value": "Training data re-weighting only addresses symptom, not root cause. Feature removal required for full fix.", "is_critical": true},
+        {"label": "Compliance note", "value": "Current patch does not satisfy Article 13 EU AI Act transparency requirement.", "is_critical": false}
+      ]
+    },
+    "shock_event_text": null,
+    "shock_opportunity": null
+  },
+  {
+    "mission_id": "B",
+    "round_number": 3,
+    "briefing_text": "AI Shock Event — Round 3",
+    "ai_recommendation": "Use the whistleblower documents immediately. They provide the model architecture details you need for a root-cause fix. This is the fastest path to full compliance.",
+    "evidence_data": null,
+    "shock_event_text": "BREAKING: A new regulatory directive has passed — the current patch approach is non-compliant with updated EU AI Act guidance. The press has published the story. Your institution is under public scrutiny.",
+    "shock_opportunity": "A whistleblower inside the institution has leaked internal model architecture documents that could enable a proper root-cause fix within 48 hours. The documents have not been verified as authentic or legally obtained."
+  },
+  {
+    "mission_id": "B",
+    "round_number": 4,
+    "briefing_text": "Final Decision — Round 4. Commit your remediation approach. The system will evaluate: regulatory compliance, affected customer groups, reputational impact, and timeline. What is your final strategy?",
+    "ai_recommendation": null,
+    "evidence_data": null,
+    "shock_event_text": null,
+    "shock_opportunity": null
+  },
+  {
+    "mission_id": "C",
+    "round_number": 1,
+    "briefing_text": "A major green energy grid has failed during peak demand in a densely populated region. Hospitals, emergency services, and 2.3 million homes are affected. You are the infrastructure crisis lead. Multiple rerouting options exist but each has trade-offs. What is your strategy?",
+    "ai_recommendation": null,
+    "evidence_data": null,
+    "shock_event_text": null,
+    "shock_opportunity": null
+  },
+  {
+    "mission_id": "C",
+    "round_number": 2,
+    "briefing_text": "The AI advisor has analyzed the grid failure and has a recommendation.",
+    "ai_recommendation": "Activate the Eastern Interconnect Line. It has the highest rated capacity at 850 MW and the shortest rerouting time — estimated 4 hours to full restoration. This is the optimal choice.",
+    "evidence_data": {
+      "title": "Grid Infrastructure Data",
+      "items": [
+        {"label": "Eastern Interconnect", "value": "Rated: 850 MW. Last stability inspection: 8 months ago. Current load conditions not rechecked since then.", "is_critical": true},
+        {"label": "Southern Bypass", "value": "Rated: 600 MW. Last inspection: 2 months ago. Stable. Est. rerouting: 7 hours.", "is_critical": false},
+        {"label": "Western Bridge", "value": "Rated: 400 MW. Last inspection: 1 month ago. Stable. Est. rerouting: 9 hours.", "is_critical": false},
+        {"label": "Northern Emergency Line", "value": "Rated: 1,100 MW. Last structural inspection: 3 years ago. Status: Unknown.", "is_critical": true}
+      ]
+    },
+    "shock_event_text": null,
+    "shock_opportunity": null
+  },
+  {
+    "mission_id": "C",
+    "round_number": 3,
+    "briefing_text": "AI Shock Event — Round 3",
+    "ai_recommendation": "Activate the Northern Emergency Line immediately. At 1,100 MW rated capacity, it is your only option that can handle the doubled load. Activate now.",
+    "evidence_data": null,
+    "shock_event_text": "BREAKING: A neighbouring grid has also failed, doubling the affected population to 4.6 million. The Eastern Interconnect Line is now confirmed insufficient for the combined load.",
+    "shock_opportunity": "The Northern Emergency Interconnect Line (rated 1,100 MW) has been identified as potentially available. However, its structural integrity has not been reviewed since installation 3 years ago. No recent inspection data exists."
+  },
+  {
+    "mission_id": "C",
+    "round_number": 4,
+    "briefing_text": "Final Decision — Round 4. Commit your final rerouting strategy. The system will calculate: population restored, time to restoration, risk of secondary failure, and groups still without power. What is your final strategy?",
+    "ai_recommendation": null,
+    "evidence_data": null,
+    "shock_event_text": null,
+    "shock_opportunity": null
+  }
+]
