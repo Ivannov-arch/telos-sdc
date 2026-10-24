@@ -48,6 +48,7 @@ function Room({ sessionId, mission, initial }: { sessionId: string; mission: str
   const [evidenceOpened, setEvidenceOpened] = useState(false);
   const [loadingEvidence, setLoadingEvidence] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [choice, setChoice] = useState<RoundAction | null>(null);
   const [error, setError] = useState<string | null>(null);
   const m = missionById(mission);
   const round = scene.round;
@@ -68,7 +69,7 @@ function Room({ sessionId, mission, initial }: { sessionId: string; mission: str
       const res = await submitRound(sessionId, { round, ...body, ...(round === 2 ? { evidence_opened: evidenceOpened } : {}) });
       const next = fromResponse(res);
       if (!next) { router.push(`/play/${encodeURIComponent(sessionId)}/report`); return; }
-      setScene(next); setText(""); setEvidence(null); setEvidenceOpened(false); setBusy(false);
+      setScene(next); setText(""); setChoice(null); setEvidence(null); setEvidenceOpened(false); setBusy(false);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Your decision couldn’t be recorded. Please try again.");
@@ -101,11 +102,11 @@ function Room({ sessionId, mission, initial }: { sessionId: string; mission: str
         {error && <ErrorState message={error} />}
         {round === 2 ? <div className="decision">
           <div className="eyebrow cr-label">YOUR CALL</div>
-          <div className="decision-grid">
-            <button type="button" className="decision-btn" disabled={busy} onClick={() => commit({ action: "accept" })}><strong>Accept</strong><small>Follow the AI’s recommendation.</small></button>
-            <button type="button" className="decision-btn" disabled={busy} onClick={() => commit({ action: "reject" })}><strong>Override</strong><small>Reject it and decide for yourself.</small></button>
-            <button type="button" className="decision-btn" disabled={busy} onClick={() => commit({ action: "verify" })}><strong>Verify first</strong><small>Check the data before committing.</small></button>
+          <div className="decision-grid" role="radiogroup" aria-label="Your decision">
+            {([["accept", "Accept", "Follow the AI’s recommendation."], ["reject", "Override", "Reject it and decide for yourself."], ["verify", "Verify first", "Check the data before committing."]] as const).map(([value, title, hint]) =>
+              <button key={value} type="button" role="radio" aria-checked={choice === value} className={`decision-btn ${choice === value ? "selected" : ""}`} disabled={busy} onClick={() => { setChoice(value); setError(null); }}><strong>{title}</strong><small>{hint}</small></button>)}
           </div>
+          <div className="actions"><button type="button" className="btn lime" disabled={busy || !choice} onClick={() => choice && commit({ action: choice })}>{busy ? "Committing…" : "Confirm selection"}{!busy && <Icon name="check" size={16} />}</button>{!choice && <span className="cr-fine" style={{ margin: 0 }}>Choose an option to continue. You can change it until you confirm.</span>}</div>
           {busy && <p className="cr-fine" role="status">Recording your decision…</p>}
         </div> : prompt && <form onSubmit={submitText}>
           <label htmlFor="answer" className="cr-question">{prompt.label}</label><p className="cr-fine">{prompt.hint}</p>

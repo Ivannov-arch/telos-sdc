@@ -415,3 +415,4 @@ input::placeholder, textarea::placeholder { color: var(--placeholder); }
 .chip { display: inline-flex; align-items: center; gap: 6px; background: var(--pill-bg); color: var(--pill-text); border: 1px solid var(--pill-border); border-radius: 30px; padding: 7px 12px; font-size: 12px; min-height: 32px; transition: background .15s, border-color .15s; }
 .chip:hover { border-color: var(--card-hover); }
 .chip.on { background: var(--petrol); color: var(--nav-active-text); border-color: var(--petrol); }
+.decision-btn.selected { border-color: var(--lime); background: #1f3158; box-shadow: 0 0 0 1px var(--lime); }
