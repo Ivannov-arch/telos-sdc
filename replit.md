@@ -23,6 +23,12 @@ checks only that the API process is alive.
 - App Router under `src/frontend/src/app`. Pages: `/`, `/profiles`,
   `/profile/new`, `/profile/[id]`, `/match/[id]`, `/simulate`,
   `/simulate/[taskId]`. The "active profile" is remembered in localStorage.
+- The main product is the crisis simulation game: `/play` (mission + quick
+  profile), `/play/[sessionId]` (4-round control room), `.../report`,
+  `.../roles`, `.../pathway/[roleId]`, and `/results` (sessions saved in
+  localStorage). The profile/match/practice pages are secondary "More tools".
+- The proxy targets `BACKEND_URL` (default local backend). The hosted backend
+  at https://telos-sdc.onrender.com needs its own `API_ACCESS_TOKEN`.
 - All browser data access goes through the typed client
   `src/frontend/src/lib/api.ts`, which calls the server-side proxy
   `src/frontend/src/app/api/backend/[...path]/route.ts`. The proxy forwards to
