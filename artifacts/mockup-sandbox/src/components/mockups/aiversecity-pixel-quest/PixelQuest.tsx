@@ -8,23 +8,68 @@ const MISSIONS: Mission[] = [
   { id: "C", name: "Grid Failure", crisis: "A clean-energy grid fails at peak demand", sdg: "SDG 07 · CLEAN ENERGY", code: "SECTOR 03", pitch: "Hospitals are dark. A heatwave is still climbing.", icon: "grid" },
 ];
 const ROUNDS = ["Choose a route", "AI enters the field", "Unexpected shock", "Final call"];
-const OPTION_SETS = [
-  [
-    { title: "Protect the clinics", detail: "Reserve the fastest route for hospitals and local health hubs.", tag: "A / TRIAGE" },
-    { title: "Open every route", detail: "Spread supplies wide now; accept a slower, uneven arrival.", tag: "B / DISTRIBUTE" },
-    { title: "Back local crews", detail: "Give regional coordinators control of scarce stock.", tag: "C / DELEGATE" },
-  ],
-  [
-    { title: "Audit the model", detail: "Pause approvals and inspect outcomes by region.", tag: "A / INVESTIGATE" },
-    { title: "Restore human review", detail: "Route borderline applications to local assessors.", tag: "B / OVERRIDE" },
-    { title: "Fix the data", detail: "Rebalance the training sample before releasing a patch.", tag: "C / REBUILD" },
-  ],
-  [
-    { title: "Keep critical power on", detail: "Ration non-essential demand; protect hospitals first.", tag: "A / PRIORITISE" },
-    { title: "Island the network", detail: "Separate vulnerable nodes to stop the cascade.", tag: "B / CONTAIN" },
-    { title: "Ask communities", detail: "Share local load forecasts before committing reserves.", tag: "C / COORDINATE" },
-  ],
-];
+const CHOICES: Record<string, Partial<Record<number, string[]>>> = {
+  A: {
+    1: [
+      "Split the limited budget across all four routes so every region gets some supply, and keep a small reserve for surprises.",
+      "Put most of the budget into the two routes that reach the most people and accept that some regions will wait.",
+      "Spend the first hours collecting data on port status and route capacity before committing any budget.",
+      "Prioritise the most vulnerable groups, such as children, hospitals and remote villages, even if it costs more per person.",
+    ],
+    3: [
+      "Accept the volunteer network at once to cover Routes A and C, and use the saved budget on the remaining routes.",
+      "Start with a small trial using the volunteers on one route while I vet them, and scale up only once they check out.",
+      "Decline the unvetted volunteers and reallocate the reduced budget across the routes that are still open.",
+      "Ask the volunteer network for credentials and references first, then decide how many routes to hand them.",
+    ],
+    4: [
+      "Commit to a staged plan: protect the most vulnerable first, use verified partners for the rest, and review daily.",
+      "Concentrate everything on the two highest-capacity routes to reach the largest population fastest.",
+      "Keep a balanced spread across the open routes with a clear rule for moving budget when a route fails.",
+      "Use the volunteers wherever they are already vetted and rely on formal logistics partners everywhere else.",
+    ],
+  },
+  B: {
+    1: [
+      "Patch the scoring model quickly to correct the disparity, then audit the results afterwards.",
+      "Pause automated decisions for the affected groups and move their applications to human review while I investigate.",
+      "Commission an independent audit of the model and training data to find the root cause before changing anything.",
+      "Notify the affected applicants, offer to re-review their cases, and cooperate openly with the regulators.",
+    ],
+    3: [
+      "Use the leaked documents straight away to find the root cause, because the 48-hour fix outweighs the risk.",
+      "Quarantine the leaked documents, ask legal counsel to confirm they are authentic and lawful, then decide.",
+      "Ignore the leak, switch to the new EU compliance guidance, and rebuild the fix from our own records.",
+      "Disclose the leak to the regulators and let them guide how it can be used.",
+    ],
+    4: [
+      "Commit to a full root-cause remediation with independent verification, transparent reporting and compensation for affected customers.",
+      "Roll out the quickest compliant patch now and schedule a deeper review within the quarter.",
+      "Suspend the model, return to human underwriting, and relaunch only once an external audit signs off.",
+      "Fix the model using only verified evidence, publish what happened, and set up ongoing bias monitoring.",
+    ],
+  },
+  C: {
+    1: [
+      "Restore power to hospitals and emergency services first, then bring back residential areas in stages.",
+      "Reroute power across all available lines to bring as many homes back as fast as possible.",
+      "Check the load and condition of each line before switching anything, to avoid a second failure.",
+      "Ask large industrial users to cut demand so that the limited supply covers critical sites and homes.",
+    ],
+    3: [
+      "Activate the Northern Emergency Line immediately, since it is the only option that can carry the larger load.",
+      "Get an engineer to inspect the Northern line quickly, and bring it online only if it passes.",
+      "Leave the Northern line off, protect critical sites with backup generators, and ration the rest of the grid.",
+      "Bring the Northern line on at partial load while monitoring it, with a plan to cut it off at any sign of strain.",
+    ],
+    4: [
+      "Commit to a staged restoration: critical sites first, then residential zones by priority, with checks before each step.",
+      "Use every available line, including the Northern one, at full capacity to restore the most people the fastest.",
+      "Use only lines with recent inspection data and cover the gap with generators and demand reduction.",
+      "Restore in zones, assign teams to monitor each line, and be ready to switch zones off if load becomes unsafe.",
+    ],
+  },
+};
 const ROUND2_CHOICES = [
   { title: "ACCEPT", detail: "Follow the advisor's recommendation.", tag: "01" },
   { title: "OVERRIDE", detail: "Choose a different course yourself.", tag: "02" },
@@ -95,7 +140,7 @@ export function PixelQuest() {
   const mission = useMemo(() => MISSIONS.find((item) => item.id === missionId) ?? MISSIONS[0], [missionId]);
   const advisorAwake = round >= 2;
   const isReveal = round === 5;
-  const options = OPTION_SETS[missionId === "A" ? 0 : missionId === "B" ? 1 : 2];
+  const options = CHOICES[missionId]?.[round] ?? [];
   const shock = SHOCKS[missionId];
   const verified = roundHistory.some((entry) => entry.action === "VERIFY");
   const adapted = roundHistory.some((entry) => entry.action === "ADAPTED");
@@ -145,9 +190,17 @@ export function PixelQuest() {
                 {round === 1 && <div className="pq-dialogue"><PixelAdvisor sleeping/><div className="pq-dialogue-text"><b>COMMS / AIX NOT YET ONLINE</b>“No recommendation is coming yet. What matters most in the first move?”<i className="pq-cursor"/></div></div>}
                 {round === 2 && <div className="pq-dialogue"><PixelAdvisor/><div className="pq-dialogue-text"><b>AIX / ADVISOR ONLINE</b>{ADVICE[mission.id]}<i className="pq-cursor"/></div></div>}
                 {round === 3 && <><div className="pq-shock"><div className="pq-label">UNEXPECTED SHOCK / EVENT LOG</div><p>{shock.opportunity}</p></div><div className="pq-notice">{showEvidence ? "VERIFIED / Community operations data confirms this option is available. Confidence: 82%." : "UNVERIFIED / The opportunity has not yet been checked against field data."}</div></>}
-                {round > 0 && round < 5 && <div className="pq-choice-grid">
-                  {(round === 2 ? ROUND2_CHOICES : options).map((option, index) => <button key={option.tag} className={`pq-choice ${selected === index ? "selected" : ""}`} type="button" onClick={() => setSelected(index)}>
-                    <em>{option.tag}</em><strong>{option.title}</strong><small>{round === 2 && index === 2 ? (showEvidence ? "Evidence reviewed. Then decide." : "Open the field data before committing.") : option.detail}</small>
+                {round > 0 && round < 5 && round !== 2 && <div className="pq-option-set">
+                  <div className="pq-option-caption">SELECT A STARTING POINT <span>4 POSSIBLE MOVES · NO RIGHT ANSWER</span></div>
+                  <div className="pq-choice-grid">
+                    {options.map((option, index) => <button key={`${mission.id}-${round}-${index}`} className={`pq-choice ${selected === index ? "selected" : ""}`} type="button" aria-pressed={selected === index} onClick={() => { setSelected(index); setThoughts(option); }}>
+                      <span className="pq-option-number">0{index + 1}</span><span className="pq-choice-text">{option}</span><span className="pq-choice-cursor" aria-hidden="true">▶</span>
+                    </button>)}
+                  </div>
+                </div>}
+                {round === 2 && <div className="pq-choice-grid pq-advisor-choices">
+                  {ROUND2_CHOICES.map((option, index) => <button key={option.tag} className={`pq-choice ${selected === index ? "selected" : ""}`} type="button" aria-pressed={selected === index} onClick={() => setSelected(index)}>
+                    <em>{option.tag}</em><strong>{option.title}</strong><small>{index === 2 ? (showEvidence ? "Evidence reviewed. Then decide." : "Open the field data before committing.") : option.detail}</small>
                   </button>)}
                 </div>}
                 {round > 0 && round < 5 && <div className="pq-thoughts">
