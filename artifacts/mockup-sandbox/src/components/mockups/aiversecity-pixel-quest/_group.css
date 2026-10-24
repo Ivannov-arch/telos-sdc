@@ -133,6 +133,17 @@
 .pq-choice em { display:block; font-style:normal; color:var(--pq-yellow); font-size:8px; letter-spacing:.15em; margin-bottom:7px; }
 .pq-choice strong { display:block; font:700 11px 'Oxanium',sans-serif; margin-bottom:5px; }
 .pq-choice small { display:block; color:var(--pq-muted); font-size:8px; line-height:1.55; }
+.pq-thoughts { margin-top:14px; padding:12px; border:1px dashed #536b91; background:rgba(8,19,41,.72); }
+.pq-thoughts label { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px; color:var(--pq-yellow); font-size:8px; letter-spacing:.14em; }
+.pq-thoughts label span { color:var(--pq-muted); font-size:7px; text-align:right; }
+.pq-thoughts textarea { display:block; width:100%; min-height:74px; resize:vertical; border:1px solid #354e73; border-radius:0; outline:none; padding:10px 11px; background:#09162d; color:var(--pq-white); font:9px/1.75 'Space Mono',monospace; }
+.pq-thoughts textarea::placeholder { color:#778ba9; }
+.pq-thoughts textarea:focus { border-color:var(--pq-yellow); box-shadow:0 0 0 2px #efdd8420; }
+.pq-thoughts small { display:block; color:var(--pq-muted); margin-top:7px; font-size:7px; }
+.pq-written { margin-top:13px; }
+.pq-written blockquote { border-top:1px solid #2c4365; margin:0; padding:10px 0; }
+.pq-written blockquote small { color:var(--pq-cyan); font-size:7px; letter-spacing:.1em; }
+.pq-written blockquote p { color:#d5e0ed; margin-top:5px; font-size:9px; line-height:1.8; overflow-wrap:anywhere; }
 .pq-shock { border:1px solid #e18c6e; background:#382940; padding:12px 14px; margin:12px 0; position:relative; }
 .pq-shock::before { content:""; position:absolute; left:-1px; top:-1px; width:10px; height:10px; background:#e18c6e; }
 .pq-shock .pq-label { color:#f1a17e; }
@@ -199,6 +210,9 @@
  .pq-panel { padding:11px; }
  .pq-choice-grid { grid-template-columns:1fr; }
  .pq-choice { min-height:auto; }
+ .pq-thoughts { padding:10px; }
+ .pq-thoughts label { align-items:flex-start; flex-direction:column; gap:5px; }
+ .pq-thoughts label span { text-align:left; }
  .pq-reveal { padding:12px; }
  .pq-complete h2 { font-size:17px; }
  .pq-path ol { grid-template-columns:1fr; }

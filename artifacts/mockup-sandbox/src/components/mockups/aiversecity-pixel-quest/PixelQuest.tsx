@@ -89,8 +89,9 @@ export function PixelQuest() {
   const [missionId, setMissionId] = useState("A");
   const [round, setRound] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
+  const [thoughts, setThoughts] = useState("");
   const [showEvidence, setShowEvidence] = useState(false);
-  const [roundHistory, setRoundHistory] = useState<Array<{ action: string; option: number }>>([]);
+  const [roundHistory, setRoundHistory] = useState<Array<{ action: string; option: number; thoughts?: string }>>([]);
   const mission = useMemo(() => MISSIONS.find((item) => item.id === missionId) ?? MISSIONS[0], [missionId]);
   const advisorAwake = round >= 2;
   const isReveal = round === 5;
@@ -102,20 +103,21 @@ export function PixelQuest() {
   const roundName = round === 0 ? "MISSION SELECT" : round > 4 ? "LEVEL COMPLETE" : ROUNDS[round - 1];
 
   function begin() {
-    setRound(1); setSelected(null); setRoundHistory([]); setShowEvidence(false);
+    setRound(1); setSelected(null); setThoughts(""); setRoundHistory([]); setShowEvidence(false);
   }
   function moveMission(direction: number) {
     const index = MISSIONS.findIndex((item) => item.id === missionId);
     setMissionId(MISSIONS[(index + direction + MISSIONS.length) % MISSIONS.length].id);
   }
   function commitChoice(choice: number, kind: string) {
-    setRoundHistory((prev) => [...prev, { action: kind, option: choice }]);
+    setRoundHistory((prev) => [...prev, { action: kind, option: choice, thoughts: thoughts.trim() || undefined }]);
     setSelected(null);
+    setThoughts("");
     setRound((prev) => prev + 1);
     setShowEvidence(false);
   }
   function resetRun() {
-    setRound(0); setSelected(null); setDecision(null); setRoundHistory([]); setShowEvidence(false);
+    setRound(0); setSelected(null); setThoughts(""); setRoundHistory([]); setShowEvidence(false);
   }
   const roundNumber = Math.min(round, 4);
 
@@ -148,16 +150,22 @@ export function PixelQuest() {
                     <em>{option.tag}</em><strong>{option.title}</strong><small>{round === 2 && index === 2 ? (showEvidence ? "Evidence reviewed. Then decide." : "Open the field data before committing.") : option.detail}</small>
                   </button>)}
                 </div>}
+                {round > 0 && round < 5 && <div className="pq-thoughts">
+                  <label htmlFor="pq-thoughts">YOUR THOUGHTS <span>OPTIONAL · WRITE IT YOUR WAY</span></label>
+                  <textarea id="pq-thoughts" value={thoughts} onChange={(event) => setThoughts(event.target.value)} placeholder={round === 1 ? "What would you do first, and why?" : round === 3 ? "How does the new information change your plan?" : round === 4 ? "What matters most in your final call?" : "Add context to your decision (optional)…"} rows={3} />
+                  {round !== 2 && <small>Choose a suggested move, write your own response, or do both.</small>}
+                </div>}
                 {round === 0 ? <div className="pq-actionrow"><button className="pq-btn primary" type="button" onClick={begin}>Insert coin · Begin mission <span>▶</span></button><span style={{ color: "#94a7c4", fontSize: 8 }}>01 / 03 WORLDS</span></div> :
                 <div className="pq-actionrow">
                   {round === 2 && <button className="pq-btn subtle" type="button" onClick={() => setShowEvidence(!showEvidence)}>{showEvidence ? "✓ DATA VERIFIED" : "⌕ VERIFY EVIDENCE"}</button>}
-                  <button className="pq-btn primary" type="button" disabled={selected === null} onClick={() => {
+                  <button className="pq-btn primary" type="button" disabled={round === 2 ? selected === null : selected === null && thoughts.trim().length < 10} onClick={() => {
+                    const choice = selected ?? 99;
                     if (round === 2 && selected === 2 && !showEvidence) { setShowEvidence(true); return; }
-                    if (round === 2 && selected === 2) { commitChoice(selected, "VERIFY"); return; }
-                    if (round === 2) { commitChoice(selected!, ROUND2_CHOICES[selected!].title); return; }
-                    commitChoice(selected!, round === 1 ? "FIRST MOVE" : round === 3 ? "ADAPTED" : "FINAL CALL");
+                    if (round === 2 && selected === 2) { commitChoice(choice, "VERIFY"); return; }
+                    if (round === 2) { commitChoice(choice, ROUND2_CHOICES[selected!].title); return; }
+                    commitChoice(choice, selected === null ? "CUSTOM RESPONSE" : round === 1 ? "FIRST MOVE" : round === 3 ? "ADAPTED" : "FINAL CALL");
                   }}>
-                    {round === 4 ? "LOCK IN · REVEAL" : round === 2 ? selected === 2 && !showEvidence ? "OPEN FIELD DATA" : "COMMIT DECISION" : "CONFIRM MOVE"} <span>▶</span>
+                    {round === 4 ? "LOCK IN · REVEAL" : round === 2 ? selected === 2 && !showEvidence ? "OPEN FIELD DATA" : "COMMIT DECISION" : selected === null ? "SUBMIT YOUR RESPONSE" : "CONFIRM MOVE"} <span>▶</span>
                   </button>
                   {round === 2 && <span style={{ color: "#94a7c4", fontSize: 8 }}>{selected === 0 ? "ACCEPT" : selected === 1 ? "OVERRIDE" : selected === 2 ? showEvidence ? "VERIFY" : "VERIFY FIRST" : "CHOOSE YOUR RESPONSE"}</span>}
                 </div>}
@@ -178,6 +186,7 @@ export function PixelQuest() {
                   <div className="pq-role"><span className="pq-match">76% FIT</span><strong>Resilience Programme Lead</strong><small>Builds response plans with local partners · ESCO mapped</small></div>
                 </div>
               </div>
+              {roundHistory.some((entry) => entry.thoughts) && <div className="pq-reveal-block pq-written"><h3>Your words from the field</h3>{roundHistory.map((entry, index) => entry.thoughts ? <blockquote key={`${index}-${entry.action}`}><small>ROUND 0{index + 1} · {entry.action}</small><p>{entry.thoughts}</p></blockquote> : null)}</div>}
               <div className="pq-reveal-block pq-path"><h3>Your next level · reskilling path</h3><ol><li><strong>Data literacy</strong>Read a model's confidence and spot missing evidence · 2 weeks</li><li><strong>Human-centred operations</strong>Map stakeholders and prioritise under constraints · 3 weeks</li><li><strong>AI accountability</strong>Practice an impact audit using a real case · 4 weeks</li></ol></div>
               <div className="pq-actionrow"><button className="pq-btn primary" type="button" onClick={resetRun}>PLAY ANOTHER MISSION <span>↻</span></button><button className="pq-btn subtle" type="button" onClick={() => { setMissionId("B"); resetRun(); }}>EXPLORE ROLE MAP</button></div>
             </div>}
