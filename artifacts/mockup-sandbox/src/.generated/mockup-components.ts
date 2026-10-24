@@ -8,7 +8,7 @@ export const modules: ModuleMap = {
   "./components/mockups/aiversecity-purple-yellow/Current.tsx": () => import("../components/mockups/aiversecity-purple-yellow/Current.tsx"),
   "./components/mockups/aiversecity-purple-yellow/PurpleYellow.tsx": () => import("../components/mockups/aiversecity-purple-yellow/PurpleYellow.tsx"),
   "./components/mockups/career-atelier/CareerAtelier.tsx": () => import("../components/mockups/career-atelier/CareerAtelier.tsx"),
-  "./components/mockups/career-fieldnotes/CareerFieldnotes.tsx": () => import("../components/mockups/career-fieldnotes/CareerFieldnotes.tsx"),
   "./components/mockups/career-studio/CareerStudio.tsx": () => import("../components/mockups/career-studio/CareerStudio.tsx"),
+  "./components/mockups/career-fieldnotes/CareerFieldnotes.tsx": () => import("../components/mockups/career-fieldnotes/CareerFieldnotes.tsx"),
   "./components/mockups/telos-blue-system/TelosBlueSystem.tsx": () => import("../components/mockups/telos-blue-system/TelosBlueSystem.tsx")
 };
