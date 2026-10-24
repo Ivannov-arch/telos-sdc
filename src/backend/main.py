@@ -17,22 +17,31 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, RedirectResponse
 from postgrest.exceptions import APIError as PostgrestAPIError
 from backend.routers import match, profile, simulate
+from backend.routers import game  # FutureProof crisis simulation — F01/F02/F03
 from backend.access import require_api_access
 
 app = FastAPI(
-    title="Aiversecity API",
-    description="Future-Ready Workforce Matching Engine — SDC XMUM Hackathon",
-    version="1.0.0",
+    title="FutureProof API — Aiversecity SDC XMUM",
+    description=(
+        "FutureProof: Human–AI Decision Lab. "
+        "Crisis simulation game → behavioral skill report → career intelligence."
+    ),
+    version="2.0.0",
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],   # Person C: tighten this to Next.js origin in prod
+    allow_origins=["*"],   # Tighten to Next.js origin in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# FutureProof Game Engine (F01 Quick Skill Profile + F02 Crisis Simulation + F03 Report)
+app.include_router(game.router, prefix="/api", tags=["game"],
+                   dependencies=[Depends(require_api_access)])
+
+# Legacy pipeline (kept — CV upload, ESCO match, micro-task simulate)
 app.include_router(profile.router, prefix="/api", tags=["profile"],
                    dependencies=[Depends(require_api_access)])
 app.include_router(match.router, prefix="/api", tags=["matching"],
