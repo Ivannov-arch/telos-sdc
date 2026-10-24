@@ -1,4 +1,10 @@
 fastapi
+# Security floors also apply to installs that do not use uv.lock.
+anyio>=4.14.2
+certifi>=2026.10.19
+httpcore>=1.0.9
+httpx>=0.28.1
+idna>=3.15
 uvicorn[standard]
 supabase
 python-dotenv

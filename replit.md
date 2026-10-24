@@ -8,10 +8,11 @@ Tailwind v4 frontend (`src/frontend`). Keep the existing source layout under
 
 - **Start application** (Run button, preview on port 5000):
   `cd src/frontend && npx next dev --hostname 0.0.0.0 --port 5000`
-- **Backend API** (console, port 8000):
+- **Backend API** (optional local development server, console, port 8000):
   `uv run uvicorn backend.main:app --app-dir src --host 0.0.0.0 --port 8000`
 
-Both must be running. Python dependencies live in the root `pyproject.toml` /
+The app's API proxy uses the hosted Render backend by default, so the local
+Backend API workflow is not required to run the preview. Python dependencies live in the root `pyproject.toml` /
 `uv.lock` (mirroring `src/backend/requirements.txt`); frontend dependencies in
 `src/frontend/package.json` (`npm install` inside `src/frontend`).
 
@@ -27,12 +28,13 @@ checks only that the API process is alive.
   profile), `/play/[sessionId]` (4-round control room), `.../report`,
   `.../roles`, `.../pathway/[roleId]`, and `/results` (sessions saved in
   localStorage). The profile/match/practice pages are secondary "More tools".
-- The proxy targets `BACKEND_URL` (default local backend). The hosted backend
-  at https://telos-sdc.onrender.com needs its own `API_ACCESS_TOKEN`.
+- The proxy targets `BACKEND_URL` (default
+  `https://telos-sdc.onrender.com`). The hosted backend needs its own
+  `API_ACCESS_TOKEN`.
 - All browser data access goes through the typed client
   `src/frontend/src/lib/api.ts`, which calls the server-side proxy
   `src/frontend/src/app/api/backend/[...path]/route.ts`. The proxy forwards to
-  `BACKEND_URL` (default `http://127.0.0.1:8000`) and attaches the
+  `BACKEND_URL` (default `https://telos-sdc.onrender.com`) and attaches the
   `API_ACCESS_TOKEN` bearer token. **Never expose that token to the browser.**
 - `next.config.ts` sets `allowedDevOrigins` for the Replit preview domains (and
   `127.0.0.1` for local checks). Next's dev runtime does not hydrate until its

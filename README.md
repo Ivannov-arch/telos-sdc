@@ -9,13 +9,68 @@
 
 ---
 
-## Overview
+## Team Information
 
-Traditional CVs and static questionnaires fail to reveal how individuals actually think, adapt, and collaborate with AI under pressure. **Telos** replaces self-reported claims with an interactive 4-round crisis simulation. By measuring how users respond to incomplete information, conflicting priorities, shock events, and AI recommendations, Telos objectively evaluates behavioral competencies and pairs candidates with optimal future-proof roles.
+| Field               | Details                                                  |
+|:--------------------|:---------------------------------------------------------|
+| **Team Name**       | BLUFFING                                                 |
+| **Domain**          | Domain 1 — The Aiversecity Future-Ready Workforce        |
+| **SDG Track**       | SDG 4, SDG 8, SDG 9, SDG 10                              |
+| **Team Leader**     | Ivannov Tatang Kennedy                                   |
+| **University**      | Xiamen University Malaysia (XMUM)                        |
+| **Team Size**       | 5 Members                                                |
 
 ---
 
-## Features
+## Project Links
+
+| Resource              | Link                                           |
+|-----------------------|------------------------------------------------|
+| GitHub Repository     | https://github.com/Ivannov-arch/telos-sdc      |
+| Replit Project        | https://replit.com/@devnyxl/telos-sdc          |
+| Live Demo             | https://telospath.replit.app                   |
+| RunPod BGE-M3 Endpoint| `RUNPOD_BGE_M3_URL`                            |
+| RunPod LLM Endpoint   | `RUNPOD_LLM_ENDPOINT_URL`                      |
+| Supabase Project      | https://supabase.com/dashboard/project/xknjmvfbgghnrujnjhoo|
+| Slide Deck            | https://canva.link/0zaa61ydhwlq8uz               |
+| Demo Video            | https://youtu.be/ajJs44XIqno?si=Xx8YH0mSdkSs6P7E |
+
+---
+
+## Environment Variables
+
+The backend requires the following environment variables to connect to RunPod and Supabase.
+
+| Variable                  | Description                        |
+|---------------------------|------------------------------------|
+| `RUNPOD_API_KEY`          | RunPod API authentication          |
+| `RUNPOD_BGE_M3_URL`       | BGE-M3 embedding endpoint          |
+| `RUNPOD_LLM_URL`          | LLM inference endpoint             |
+| `RUNPOD_LLM_ENDPOINT_URL` | LLM endpoint configuration         |
+| `SUPABASE_URL`            | Supabase project URL               |
+| `SUPABASE_SECRET_KEY`     | Supabase server-side secret key    |
+
+**Security:** Configure these variables using your deployment platform's secret management settings. Never commit actual API keys or secret keys to GitHub.
+
+## 1. Problem Statement
+
+The job market is changing rapidly due to technological advancement, artificial intelligence, and evolving industry demands. Many students and job seekers struggle to identify their strengths, understand future career opportunities, and determine which skills they need to develop.
+
+Traditional career assessments often focus on existing qualifications or personality tests. They may not fully demonstrate how individuals make decisions, respond to challenges, or adapt to changing situations.
+
+TELOS addresses this problem by helping users explore their potential through interactive simulations, skill analysis, and personalised career recommendations.
+
+## 2. Our Solution
+
+TELOS provides an interactive platform that connects users' skills, decisions, and learning progress with potential future careers.
+
+Instead of relying only on conventional assessments, users can participate in simulated real-world challenges, receive AI-assisted feedback, identify skill gaps, and explore suitable career pathways.
+
+The platform aims to make career planning more practical, personalised, and accessible.
+
+---
+
+## 3. Features
 
 - **Interactive Crisis Control Room**: Experience high-stakes 4-round scenarios (e.g., *Southeast Asia Food Supply Chain Disruption*, *Credit Scoring Algorithmic Bias*) with live briefings, data evidence, and unforeseen shocks.
 - **Behavioral Competency Scoring**: Evaluates six core dimensions: Critical Thinking, Systems Thinking, Crisis Management, Ethical Reasoning, Resilience, and AI Literacy.
@@ -25,6 +80,23 @@ Traditional CVs and static questionnaires fail to reveal how individuals actuall
 - **Zero-Exposure Server Proxy**: Next.js App Router server-side API proxy isolates backend secrets and operator tokens from client browsers.
 
 ---
+
+## 4. Target Users
+
+- University students preparing for future employment.
+- Fresh graduates exploring career opportunities.
+- Working adults seeking career development.
+- Career switchers exploring new professional directions.
+- HR managers interested in workforce skills and development.
+
+## 5. Sustainable Development Goals (SDGs)
+
+TELOS supports the following SDGs:
+
+- **SDG 4 — Quality Education:** Encourages continuous learning and skills development.
+- **SDG 8 — Decent Work and Economic Growth:** Helps users prepare for employment and changing workforce needs.
+- **SDG 9 — Industry, Innovation and Infrastructure:** Uses AI and digital technology to support career development.
+- **SDG 10 — Reduced Inequalities:** Aims to make career guidance and learning opportunities more accessible.
 
 ## Tech Stack
 

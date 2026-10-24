@@ -530,18 +530,45 @@ def get_user_profile(user_id: str):
     Retrieve a saved profile by UUID.
     """
     db = get_supabase()
-    resp = (
-        db.schema("telos_sdc")
-        .table("user_profiles")
-        .select("id, hard_skills, soft_skills, experience_years, source_type, user_dense_vector")
-        .eq("id", user_id)
-        .maybe_single()
-        .execute()
-    )
+
+    # Select only lightweight columns — skip user_dense_vector (1024-dim pgvector)
+    # which is huge and causes PostgREST serialization / timeout errors.
+    try:
+        resp = (
+            db.schema("telos_sdc")
+            .table("user_profiles")
+            .select("id, hard_skills, soft_skills, experience_years, source_type")
+            .eq("id", user_id)
+            .maybe_single()
+            .execute()
+        )
+    except Exception as e:
+        logger.error(f"Supabase query failed for profile {user_id!r}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=f"Database query failed: {e}",
+        )
+
     if not resp or not getattr(resp, "data", None):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User profile {user_id!r} not found")
 
     data = resp.data
+
+    # Lightweight check: does the vector column have a value?
+    has_vector = False
+    try:
+        vec_resp = (
+            db.schema("telos_sdc")
+            .table("user_profiles")
+            .select("id")
+            .eq("id", user_id)
+            .not_("user_dense_vector", "is", "null")
+            .maybe_single()
+            .execute()
+        )
+        has_vector = bool(vec_resp and getattr(vec_resp, "data", None))
+    except Exception as e:
+        logger.warning(f"Vector existence check failed for {user_id!r}: {e}")
 
     def _parse_skill(s) -> SkillEntry:
         if isinstance(s, str):
@@ -566,6 +593,6 @@ def get_user_profile(user_id: str):
         soft_skills=soft_skills,
         experience_years=data.get("experience_years", 0) or 0,
         source_type=data.get("source_type", "form") or "form",
-        has_dense_vector=data.get("user_dense_vector") is not None,
+        has_dense_vector=has_vector,
         message="Profile retrieved",
     )
